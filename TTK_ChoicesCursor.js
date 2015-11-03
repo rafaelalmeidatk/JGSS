@@ -3,7 +3,7 @@
 // Por Konoke
 //======================================================================
 
-/*:pt
+/*:
   * @author Konoke
   * @plugindesc Shows a cursor in choices
   * @help The plugin is plug-and-play, you just need configure it the way you preffer.
