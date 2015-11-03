@@ -1,46 +1,46 @@
 //======================================================================
 // TTK - Choices Cursor
-// Por Fogomax
+// Por Konoke
 //======================================================================
 
 /*:pt
-	* @author Fogomax
-	* @plugindesc Shows a cursor in choices
-	* @help The plugin is plug-and-play, you just need configure it the way you preffer.
+  * @author Konoke
+  * @plugindesc Shows a cursor in choices
+  * @help The plugin is plug-and-play, you just need configure it the way you preffer.
 
-	* @param Image
- 	* @desc Image to be used in the cursor
- 	* @default ./img/system/ChoicesCursor.png
+  * @param Image
+  * @desc Image to be used in the cursor
+  * @default ./img/system/ChoicesCursor.png
 
-	* @param Velocity
- 	* @desc Velocity of animation of the cursor
- 	* @default 5
+  * @param Velocity
+  * @desc Velocity of animation of the cursor
+  * @default 5
 
-	* @param Distance
- 	* @desc Distance of cursor to the options
- 	* @default 40
+  * @param Distance
+  * @desc Distance of cursor to the options
+  * @default 40
 
- 	* <TTK ChoicesCursor>
+  * <TTK ChoicesCursor>
 */
 
 /*:pt
-	* @author Fogomax
-	* @plugindesc Exibe um cursor na seleção de escolhas
-	* @help O plugin é plug-and-play, você precisa apenas configurá-lo da maneira que preferir.
+  * @author Konoke
+  * @plugindesc Exibe um cursor na seleção de escolhas
+  * @help O plugin é plug-and-play, você precisa apenas configurá-lo da maneira que preferir.
 
-	* @param Image
- 	* @desc Imagem para ser usada no cursor
- 	* @default ./img/system/ChoicesCursor.png
+  * @param Image
+  * @desc Imagem para ser usada no cursor
+  * @default ./img/system/ChoicesCursor.png
 
-	* @param Velocity
- 	* @desc Velocidade de animação do cursor
- 	* @default 5
+  * @param Velocity
+  * @desc Velocidade de animação do cursor
+  * @default 5
 
-	* @param Distance
- 	* @desc Distância do cursor para as opções
- 	* @default 40
+  * @param Distance
+  * @desc Distância do cursor para as opções
+  * @default 40
 
- 	* <TTK ChoicesCursor>
+  * <TTK ChoicesCursor>
 */
 
 var Imported = Imported || {};
