@@ -1,11 +1,12 @@
 //======================================================================
-// TTK - Choices Cursor
-// Por Konoke
+// TTK - Choices Cursor 1.1.2
+// Por Fogomax
 //======================================================================
 
 /*:
-  * @author Konoke
+  * @author Fogomax
   * @plugindesc Shows a cursor in choices
+    <TTK ChoicesCursor>
   * @help The plugin is plug-and-play, you just need configure it the way you preffer.
 
   * @param Image
@@ -19,13 +20,12 @@
   * @param Distance
   * @desc Distance of cursor to the options
   * @default 40
-
-  * <TTK ChoicesCursor>
 */
 
 /*:pt
-  * @author Konoke
+  * @author Fogomax
   * @plugindesc Exibe um cursor na seleção de escolhas
+    <TTK ChoicesCursor>
   * @help O plugin é plug-and-play, você precisa apenas configurá-lo da maneira que preferir.
 
   * @param Image
@@ -39,8 +39,6 @@
   * @param Distance
   * @desc Distância do cursor para as opções
   * @default 40
-
-  * <TTK ChoicesCursor>
 */
 
 var Imported = Imported || {};
@@ -52,11 +50,10 @@ TTK.ChoicesCursor = {};
 
 (function ($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTK ChoicesCursor>'); })[0].parameters;
-	$.Vars = $.Vars || {};
 
-	$.cursorImage = $.Params["Cursor Image"];
-	$.cursorVelocity = $.Params["Cursor Velocity"];
-	$.cursorDistance = $.Params["Distance"] * -1;
+	$.cursorImage = $.Params["Image"];
+	$.cursorVelocity = parseInt($.Params["Velocity"]);
+	$.cursorDistance = parseInt($.Params["Distance"]) * -1;
 
 	//-----------------------------------------------------------------------------
 	// Window_Selectable
@@ -79,6 +76,7 @@ TTK.ChoicesCursor = {};
 	    	if (this._choicesCursorDestinationY > this._choicesCursor.y) {
 	    		this._choicesCursor.y = (this._choicesCursor.y + $.cursorVelocity >= this._choicesCursorDestinationY) ? (this._choicesCursorDestinationY) : (this._choicesCursor.y + $.cursorVelocity);
 	    	} else {
+	    		console.log("b");
 	    		this._choicesCursor.y = (this._choicesCursor.y - $.cursorVelocity <= this._choicesCursorDestinationY) ? (this._choicesCursorDestinationY) : (this._choicesCursor.y - $.cursorVelocity);
 	    	}
 	    }
