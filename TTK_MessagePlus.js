@@ -1,5 +1,5 @@
 //======================================================================
-// TTK - Message Plus
+// TTK - Message Plus (v1.0.1)
 // Por Fogomax
 //======================================================================
 
@@ -64,7 +64,22 @@ TTK.MessagePlus = {};
 	Window_Message.prototype.initialize = function() {
 		_Window_Message_initialize.call(this);
 		this._faceWindow = new Window_Message_Face(Window_Base._faceWidth, Window_Base._faceWidth);
+		this._faceWindow.hide();
 		this.addChild(this._faceWindow);
+	}
+
+	var _Window_Message_open = Window_Message.prototype.open;
+
+	Window_Message.prototype.open = function() {
+		_Window_Message_open.call(this);
+		this._faceWindow.open();
+	}
+
+	var _Window_Message_close = Window_Message.prototype.close;
+
+	Window_Message.prototype.close = function() {
+		_Window_Message_close.call(this);
+		this._faceWindow.close();
 	}
 
 	Window_Message.prototype.refreshSize = function(texts) {
@@ -87,14 +102,27 @@ TTK.MessagePlus = {};
 			return;
 		}
 
-		if ($.characterFocus == 0) {
+		if ($.characterFocus == 0)
 			var pos = [$gamePlayer.screenX(), $gamePlayer.screenY()];
-		} else {
+		else
 			var pos = [$gameMap.event($.characterFocus).screenX(), $gameMap.event($.characterFocus).screenY()];
+
+		var stdP = this._faceWindow.standardPadding();
+		var x = (pos[0] - (this.width / 2));
+		var px = (this.hasFace()) ? (x - Window_Base._faceWidth - (stdP * 2)) : (x);
+		if (x + this.width > Graphics.width)
+			x = Graphics.width - this.width;
+		else if (px < 0) {
+			console.log("aaa");
+			x = (this.hasFace()) ? (Window_Base._faceWidth + (stdP * 2)) : (0);
 		}
 
-		var x = (pos[0] - (this.width / 2));
 		var y = (pos[1] - (this.height + 48));
+		var py = (this.hasFace()) ? (y - Window_Base._faceWidth - (stdP * 2)) : (y);
+		if (y < 0)
+			y = 0;
+		else if (py > Graphics.height)
+			y = (this.hasFace()) ? (Graphics.height - Window_Base._faceHeight - (stdP *2)) : (Graphics.height - this.height);
 		this.move(x, y, this.width, this.height);
 	};
 
