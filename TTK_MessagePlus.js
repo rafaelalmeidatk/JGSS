@@ -1,5 +1,5 @@
 //======================================================================
-// TTK - Message Plus (v1.1.2)
+// TTK - Message Plus (v1.2.2)
 // By Fogomax
 //======================================================================
 
@@ -23,17 +23,19 @@
 	  - MessagePlus setName x
 	  Shows the name window with the name x
 
+	  - SCRIPT CALL: this.setMessageName(x)
+	  Shows the name window with the name x. Use this if the name you want have blank
+	  spaces (example: "John Rick")
+
 	  - MessagePlus removeName
 	  Hide the name window
 
 	@param Face Padding
 	@desc The padding (in pixels) of the face window
 	@default 8
-
 	@param Window Name Height
 	@desc The height (in pixels) of the name window
 	@default 50
-
 	@param Window Name Dim
 	@desc If the main message window dim, the name window will do too?
 	@default true
@@ -100,7 +102,7 @@ TTK.MessagePlus = {};
 		this._nameWindow.hide();
 		this.addChild(this._faceWindow);
 		this.addChild(this._nameWindow);
-	}
+	};
 
 	var _Window_Message_open = Window_Message.prototype.open;
 
@@ -108,7 +110,7 @@ TTK.MessagePlus = {};
 		_Window_Message_open.call(this);
 		this._faceWindow.open();
 		this._nameWindow.open();
-	}
+	};
 
 	var _Window_Message_close = Window_Message.prototype.close;
 
@@ -116,7 +118,7 @@ TTK.MessagePlus = {};
 		_Window_Message_close.call(this);
 		this._faceWindow.close();
 		this._nameWindow.close();
-	}
+	};
 
 	Window_Message.prototype.refreshSize = function(texts) {
 		this._nameWindow.refreshSize();
@@ -166,6 +168,10 @@ TTK.MessagePlus = {};
 			this.move(x, y, this.width, this.height);
 		}
 		this._nameWindow.refreshPosition();
+	};
+
+	Window_Message.prototype.refreshBackground = function() {
+		this._nameWindow.refreshBackground();
 	};
 
 	Window_Message.prototype.updatePlacement = function() {
@@ -272,7 +278,7 @@ TTK.MessagePlus = {};
 		this.move(x, y, this.width, this.height);
 	};
 
-	Window_Message_Name.refreshBackground = function() {
+	Window_Message_Name.prototype.refreshBackground = function() {
 		if ($.windowNameDim)
 			this.setBackgroundType($gameMessage.background());
 	}
@@ -302,10 +308,8 @@ TTK.MessagePlus = {};
   		if (command == "MessagePlus") {
   			if (args[0] == "setBallon") {
   				if (args[1] == "current") {
-  					console.log("current");
   					$.characterFocusCurrent = true;
   				} else {
-  					console.log("other");
   					$.characterFocusCurrent = false;
   					$.characterFocus = parseInt(args[1]);
   				}
