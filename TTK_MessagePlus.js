@@ -5,7 +5,7 @@
 
 /*:
 	* @author Fogomax
-	* @plugindesc This improves the default message system, adding news features to this.
+	* @plugindesc This plugin improves the default message system, adding new features to it.
 	* <TTK MessagePlus>
 	* @help
 	● Available commands:
