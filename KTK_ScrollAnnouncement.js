@@ -1,5 +1,5 @@
 //======================================================================
-// KTK - Scroll Announcement (v1.0.1)
+// KTK - Scroll Announcement (v1.1.1)
 // By Fogomax
 //======================================================================
 
@@ -8,17 +8,21 @@
   * @plugindesc Allows the creation of rolling announcement
     <KTK ScrollAnnouncement>
   * @help
-  ● How use:
+  ● How to use:
     In an event, write in a Script Call a command with this format:
-    scroll_announ("Text", IconIndex, "Color", Italic, Outline, Velocity)
+    scroll_announ("Text", IconIndex, "Color", Italic, Outline, Speed)
+
+    If you wanna a fixed announcement (without scroll), use this format:
+    fixed_scroll_announ("Text", IconIndex, "Color", Italic, Outline, Duration)
 
     As:
     Text - Text to show in the scroll announcement
-    IconIndex - Index of the icon from the iconset, if no one let it 0
+    IconIndex - Index of the icon from the iconset, if none set it 0
     Color - Color of the text, CSS format
-    Italic - If the text will of not be italic. "true" to yes, "false" to no.
-    Contorno - Size of text outline, if no outline let it 0.
-    Velocidade - Velocity of text bearing, bigger, faster
+    Italic - If the text will be Italic or not. "true" to yes, "false" to no
+    Outline - Size of text outline, 0 if none
+    Speed - Text speed, the higher the faster
+    Duration - Time the announcement will stay in the screen
 
   ● Exemple:
     scroll_announ("A simple example", 0, "#FFFFFF", false, 3, 2)
@@ -49,6 +53,9 @@
     scroll_announ("Texto", IndiceIcone, "Cor", Itálico, Contorno, Velocidade)
     ScrollAnnouncement Texto IndiceIcone Cor Itálico Contorno Velocidade
 
+    Se você quiser um anuncio fixo (sem scroll), use esse formato:
+    fixed_scroll_announ("Texto", IndiceIcone, "Cor", Itálico, Contorno, Duração)
+
     Sendo:
     Texto - Texto a ser exibido
     IndiceIcone - Índice do ícone do iconset, se nenhum deixe 0
@@ -56,6 +63,7 @@
     Itálico - Se o texto irá ou não ser em itálico, "true" para sim e "false" para não
     Contorno - Tamanho do contorno do texto, 0 para nenhum
     Velocidade - Velocidade de rolagem do texto, quanto maior, mais rápido
+    Duração - Tempo que o anuncio ficará na tela
 
   ● Exemplo:
     scroll_announ("Frase de exemplo", 0, "#FFFFFF", false, 3, 2)
@@ -77,10 +85,12 @@
  */
 
 var Imported = Imported || {};
+Imported["KTK_ScrollAnnouncement"] = "1.1.0";
 
 var TTK = TTK || {};
 TTK.ScrollAnnouncement = {};
 var scroll_announ;
+var fixed_scroll_announ;
 
 "use strict";
 
@@ -103,6 +113,9 @@ var scroll_announ;
 	$.bgOpacity = 0;
 	$.canShowText = false;
 	$.closing = false;
+	$.maxTick = 0;
+	$.tick = 0;
+	$.isFixed = false;
 
 	//-----------------------------------------------------------------------------
 	// Window_WindowAnnouncement
@@ -127,11 +140,16 @@ var scroll_announ;
 		return 0;
 	};
 
-	Window_WindowAnnouncement.prototype.showAnnouncement = function(_Text, _IconIndex, _Color, _Italic, _Outline, _Velocity) {
+	Window_WindowAnnouncement.prototype.showAnnouncement = function(_Text, _IconIndex, _Color, _Italic, _Outline, _Velocity, _Time) {
 		if ($.activeAnnouncement)
 			return;
 		
 		$.activeAnnouncement = true;
+		if (_Time > 0) {
+			$.isFixed = true;
+			$.maxTick = _Time;
+		}
+
 		$.text = _Text;
 		$.iconIndex = _IconIndex;
 		$.velocity = _Velocity;
@@ -146,8 +164,9 @@ var scroll_announ;
 
 		if (!$.fadeIn) {
 			$.canShowText = true;
-			this.drawText($.text, $.xposText, 0, Graphics.width, 0);
 			$.bgOpacity = $.bgrOpacity;
+			this.drawBackground();
+			this.drawMessageText();
 		}
 
 		this.show();
@@ -157,7 +176,9 @@ var scroll_announ;
 		if (!$.activeAnnouncement)
 			return;
 
-		this.contents.clear();
+		if (!$.isFixed)
+			this.contents.clear();
+
 		if (!$.canShowText) {
 			$.bgOpacity = ($.bgOpacity + 0.1 >= $.bgrOpacity) ? ($.bgrOpacity) : ($.bgOpacity + 0.1);
 			if ($.bgOpacity >= $.bgrOpacity)
@@ -168,13 +189,34 @@ var scroll_announ;
 			}
 		}
 
-		$.xposText -= $.velocity;
-		this.drawBackground();
-		this.drawText($.text, $.xposText, 6, Graphics.width, 0);
-		this.drawIcon($.iconIndex, 12, 6);
-		this.drawIcon($.iconIndex, Graphics.width - 42, 6);
+		if ($.tick < $.maxTick && $.isFixed) {
+			$.tick++;
+			if ($.tick >= $.maxTick) {
+				if (!$.fadeOut)
+					this.finishAnnouncement();
+				else
+					$.closing = true;
+			}
+		}
 
-		if ($.xposText + 10 < $.textRev && !$.closing) {
+		if (!$.isFixed)
+			$.xposText -= $.velocity;
+
+
+		if (!$.isFixed) {
+			this.drawBackground();
+			this.drawMessageText();
+			this.drawIcon($.iconIndex, 12, 6);
+			this.drawIcon($.iconIndex, Graphics.width - 42, 6);
+		}
+
+		if ($.isFixed && $.closing) {
+			this.contents.clear();
+			this.drawBackground();
+			this.drawText();
+		}
+
+		if ($.xposText + 10 < $.textRev && !$.closing && !$.isFixed) {
 			if (!$.fadeOut)
 				this.finishAnnouncement();
 			else
@@ -185,6 +227,13 @@ var scroll_announ;
 			$.bgOpacity = ($.bgOpacity - 0.1 <= 0) ? (0) : ($.bgOpacity - 0.1);
 		} else if ($.closing && $.bgOpacity == 0.0)
 			this.finishAnnouncement();
+	}
+
+	Window_WindowAnnouncement.prototype.drawMessageText = function() {
+		if ($.isFixed)
+			this.drawText($.text, 0, 6, Graphics.width, "center");
+		else
+			this.drawText($.text, $.xposText, 6, Graphics.width, 0);
 	}
 
 	Window_WindowAnnouncement.prototype.drawBackground = function() {
@@ -206,6 +255,9 @@ var scroll_announ;
 		$.bgOpacity = 0;
 		$.canShowText = false;
 		$.closing = false;
+		$.maxTick = 0;
+		$.tick = 0;
+		$.isFixed = false;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -233,6 +285,10 @@ var scroll_announ;
 	//
 
 	scroll_announ = function(a, b, c, d, e, f) {
-		SceneManager._scene._announ_window.showAnnouncement(a, b, c, d, e, f);
+		SceneManager._scene._announ_window.showAnnouncement(a, b, c, d, e, f, 0);
+	};
+
+	fixed_scroll_announ = function(a, b, c, d, e, f) {
+		SceneManager._scene._announ_window.showAnnouncement(a, b, c, d, e, 0, f);	
 	}
 })(TTK.ScrollAnnouncement);
