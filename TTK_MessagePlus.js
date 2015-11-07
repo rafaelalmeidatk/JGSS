@@ -1,5 +1,5 @@
 //======================================================================
-// TTK - Message Plus (v1.2.3)
+// TTK - Message Plus (v1.2.4)
 // By Fogomax
 //======================================================================
 
@@ -33,9 +33,11 @@
 	@param Face Padding
 	@desc The padding (in pixels) of the face window
 	@default 8
+
 	@param Window Name Height
 	@desc The height (in pixels) of the name window
 	@default 50
+
 	@param Window Name Dim
 	@desc If the main message window dim, the name window will do too?
 	@default true
@@ -132,7 +134,7 @@ TTK.MessagePlus = {};
 			}
 			var stdP = this._faceWindow.standardPadding();
 			var maxWidth = (this.hasFace()) ? (Graphics.width - Window_Base._faceWidth - (stdP * 2)) : (Graphics.width);
-			var width = width + (this.standardPadding() * 1.5) + this.textPadding();
+			var width = width + (this.standardPadding() * 1.5) + (this.textPadding() * 2);
 			this.width = ((this.hasFace() && width + Window_Base._faceWidth - (stdP * 2) > Graphics.width) || width > Graphics.width) ? (maxWidth) : (width);
 			this.height = this.fittingHeight(texts.length);
 		}
@@ -281,7 +283,7 @@ TTK.MessagePlus = {};
 	Window_Message_Name.prototype.refreshBackground = function() {
 		if ($.windowNameDim)
 			this.setBackgroundType($gameMessage.background());
-	}
+	};
 
 	Window_Message_Name.prototype.refreshName = function() {
 		this.contents.clear();
