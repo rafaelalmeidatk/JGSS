@@ -5,16 +5,16 @@
 
 /*:
 	* @author Fogomax
-	* @plugindesc Incrementos para o sistema de mensagens padrão do MV
+	* @plugindesc This improves the default message system, adding news features to this.
 	* <TTK MessagePlus>
 	* @help
-	● Comandos disponíveis:
+	● Available commands:
 	  - MessagePlus set x
-	  Cria um Ballon Text no evento de ID x, caso 0, os Ballon Texts
-	  serão no jogador
+	  Creates a Ballon Text on the event of ID x, if 0, the Ballon Texts
+	  will be on player
 
 	  - MessagePlus off
-	  Desliga o plugin, as mensagens retornam ao normal
+	  Turn off the plugin, the messages come back to default
 
 	@param Face Padding
 	@desc The padding (in pixels) of face window
