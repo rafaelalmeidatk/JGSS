@@ -1,5 +1,5 @@
 //======================================================================
-// TTK - Message Plus (v1.3.4)
+// TTK - Message Plus (v1.3.5)
 // By Fogomax
 //======================================================================
 
@@ -332,7 +332,7 @@ TTK.MessagePlus = {};
 	};
 
 	Window_Message.prototype.newLineX = function() {
-	    return $gameMessage.faceName() === '' || $.characterFocus >= 0 ? 0 : 168;
+	    return $gameMessage.faceName() === '' || $.characterFocus >= 0 ? 2 : 168;
 	};
 
 	var _Window_Message_newPage = Window_Message.prototype.newPage;
