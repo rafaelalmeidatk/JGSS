@@ -1,5 +1,5 @@
 //=============================================================================
-// TTK - Slide Control (v1.0.0)
+// TTK - Slide Move (v1.1.0)
 // by Fogomax
 //=============================================================================
   
@@ -7,7 +7,7 @@
 /*:
   * @author Fogomax
   * @plugindesc This plugin gives information about the slide through script calls
-  * <TTK SlideControl>
+  * <TTK SlideMove>
   * @help
     ===========================================================================
     ● Explanation
@@ -28,20 +28,20 @@
     Return true if the user slided the Y axis, otherwise return false
 
     @param Slide Force
-    @desc The ammount of force to the movement be considered a slide
+    @desc The ammount of force to the Move be considered a slide
     @default 3
  */
 
 var Imported = Imported || {};
-Imported["TTK_SlideControl"] = "1.0.0";
+Imported["TTK_SlideMove"] = "1.0.0";
 
 var TTK = TTK || {};
-TTK.SlideControl = {};
+TTK.SlideMove = {};
 
 "use strict";
 
 (function($) {
-	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTK SlideControl>'); })[0].parameters;
+	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTK SlideMove>'); })[0].parameters;
 
 	//-----------------------------------------------------------------------------
 	// Plugin global variables
@@ -88,6 +88,22 @@ TTK.SlideControl = {};
 		return (Math.abs(this._forceY >= $.slideForce));
 	}
 
+	TouchInput.slideUp = function() {
+		return (this._forceY < 0);
+	}
+
+	TouchInput.slideDown = function() {
+		return (this._forceY > 0);
+	}
+
+	TouchInput.slideLeft = function() {
+		return (this._forceX < 0);
+	}
+
+	TouchInput.slideRight = function() {
+		return (this._forceX > 0);
+	}
+
 	var _TouchInput_onRelease = TouchInput._onRelease;
 
 	TouchInput._onRelease = function(x, y) {
@@ -96,4 +112,4 @@ TTK.SlideControl = {};
 		$.clearVariables = 2;
 		_TouchInput_onRelease.call(this, x, y);
 	};
-})(TTK.SlideControl);
+})(TTK.SlideMove);
