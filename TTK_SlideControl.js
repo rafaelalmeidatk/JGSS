@@ -27,13 +27,25 @@
     - TouchInput.isSlideY()
     Return true if the user slided the Y axis, otherwise return false
 
+    - TouchInput.slideUp()
+    Return true if the user slided to up, otherwise return false
+
+    - TouchInput.slideDown()
+    Return true if the user slided to down, otherwise return false
+    
+    - TouchInput.slideLeft()
+    Return true if the user slided to left, otherwise return false
+    
+    - TouchInput.slideRight()
+    Return true if the user slided to right, otherwise return false
+
     @param Slide Force
     @desc The ammount of force to the Move be considered a slide
     @default 3
  */
 
 var Imported = Imported || {};
-Imported["TTK_SlideMove"] = "1.0.0";
+Imported["TTK_SlideMove"] = "1.1.0";
 
 var TTK = TTK || {};
 TTK.SlideMove = {};
