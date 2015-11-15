@@ -12,16 +12,16 @@
     ===========================================================================
     ● Explanation
     ===========================================================================
-	This plugins fixes the image in the map and in the coordenates specifieds
-	in the event command, its not necessary the position be 0, 0. Because of
-	this feature, you still can use the Move Picture command with fixed
-	pictures.
+    This plugins fixes the image in the map and in the coordenates specifieds
+    in the event command, its not necessary the position be 0, 0. Because of
+    this feature, you still can use the Move Picture command with fixed
+    pictures.
 
     ===========================================================================
     ● Use
     ===========================================================================
-	Just include the prefix in the image file name. Using the default Fix
-	Prefix, the image nave would be "[FIX]Image.png".
+    Just include the prefix in the image file name. Using the default Fix
+    Prefix, the image nave would be "[FIX]Image.png".
 
     @param Fix Prefix
     @desc The prefix the image needs have to be fixed
