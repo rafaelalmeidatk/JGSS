@@ -7,7 +7,7 @@
 //=============================================================================
 // * Esse plugin faz parte do meu pack de Natal, que contém varios outros
 // * plugins simples e úteis. Link para o pack completo:
-// * <>
+// * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
  
 /*:
