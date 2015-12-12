@@ -12,14 +12,14 @@
  
 /*:
   * @author Fogomax
-  * @plugindesc Ativa o dash ao pressionar a tecla de andar duas vezes rapidamente
+  * @plugindesc Cria uma HUD de itens em um canto da tela
 
   * <TTKC ItemsHUD>
   * @help
   * ===========================================================================
   * ● Explicação
   * ===========================================================================
-  * Cria uma HUD de items em um canto da tela, mostrando seu ícone e a
+  * Cria uma HUD de itens em um canto da tela, mostrando seu ícone e a
   * quantidade de items que a equipe possui.
 
   * ===========================================================================
