@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKCC - Items HUD
+// TTKCC - Items HUD (v1.0.1)
 // by Fogomax
 // Licença: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -53,7 +53,7 @@
  */
 
 var Imported = Imported || {};
-Imported["TTKC_ItemsHUD"] = "1.0.0";
+Imported["TTKC_ItemsHUD"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.ItemsHUD = {};
@@ -97,15 +97,17 @@ TTK.ItemsHUD = {};
 
 	Window_Items_HUD.prototype.initialize = function() {
 		Window_Base.prototype.initialize.call(this, 0, 0, Graphics.width, 48 + this.standardPadding());
-		this.opacity = 0;
 		this._lastPos = -1;
+		this._firstDraw = true;
 	}
 
 	Window_Items_HUD.prototype.update = function() {
-		if ($.on && !this.visible)
+		if ($.on && !this.visible) {
 			this.show();
-		else if (!$.on && this.visible)
+		}
+		else if (!$.on && this.visible) {
 			this.hide();
+		}
 
 		if (!this.visible)
 			return;
@@ -121,7 +123,7 @@ TTK.ItemsHUD = {};
 		for (var i = 0; i < $.items.length; i++)
 			newValues.push($gameParty.numItems($dataItems[$.items[i]]));
 
-		if (newValues.join() !== $.lastItemsValues.join()) {
+		if (newValues.join() !== $.lastItemsValues.join() || this._firstDraw) {
 			this.contents.clear();
 
 			var lastSpace = 0;
@@ -133,6 +135,7 @@ TTK.ItemsHUD = {};
 			}
 
 			$.lastItemsValues = newValues;
+			if (this._firstDraw) _firstDraw = false;
 		}
 	}
 
