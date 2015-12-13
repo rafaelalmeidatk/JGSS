@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKCC - Items HUD (v1.0.1)
+// TTKCC - Items HUD (v1.0.2)
 // by Fogomax
 // Licença: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -97,6 +97,7 @@ TTK.ItemsHUD = {};
 
 	Window_Items_HUD.prototype.initialize = function() {
 		Window_Base.prototype.initialize.call(this, 0, 0, Graphics.width, 48 + this.standardPadding());
+		this.opacity = 0;
 		this._lastPos = -1;
 		this._firstDraw = true;
 	}
