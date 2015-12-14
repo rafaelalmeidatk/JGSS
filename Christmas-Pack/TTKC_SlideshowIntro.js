@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKCC - Slideshow Intro
+// TTKC - Slideshow Intro
 // by Fogomax
 // Licença: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
