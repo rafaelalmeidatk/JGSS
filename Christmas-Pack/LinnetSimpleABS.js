@@ -1,5 +1,5 @@
 //=============================================================================
-// Linnet Simples ABS (v1.0.0)
+// Linnet Simple ABS (v1.0.0)
 // by Fogomax
 // Licença: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -7,7 +7,7 @@
  
 /*:
   * @author Fogomax
-  * @plugindesc ABS simples que o jogador e inimigos funcionando
+  * @plugindesc ABS simples com o jogador e os inimigos funcionando
   * <Linnet ABS>
   * @help
 	===========================================================================
@@ -648,5 +648,4 @@ Linnet.ABS = {};
 	Utils.getAnimationId = function(id) {
 		return (id == -1) ? (1) : (id);
 	}
-
 })(Linnet.ABS);
