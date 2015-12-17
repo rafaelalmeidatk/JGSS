@@ -60,7 +60,7 @@ TTK.AdvancedJump = {};
 	//
 
 	$.terrains = $.Params['Terrenos não passáveis'].split(',').map(Number);
-	$.distance = parseInt($.Params['Distância inicial']);
+	$.distance = parseInt($.Params['Distância']);
 	$.on = ($.Params['Iniciar ligado'] === 'true');
 	Input.keyMapper[65] = "A";
 	
@@ -73,7 +73,7 @@ TTK.AdvancedJump = {};
 
 	Game_Player.prototype.update = function(sceneActive) {
 		_Game_Player_update.call(this, sceneActive);
-		if (Input.isTriggered('A')) {
+		if (Input.isTriggered('A') && $.on) {
 			this.advancedJump();
 		}
 	};
