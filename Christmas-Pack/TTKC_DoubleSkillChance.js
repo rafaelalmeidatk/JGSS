@@ -1,16 +1,47 @@
 //=============================================================================
 // TTKC - Double Skill Chance
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc When using a specific skill, there's a chance to use it again
+  *
+  * <TTKC DoubleSkillChance>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * When using a specific skill, there's a chance to use it again
+
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * In the skills that may have a chance to be repeated, add the following
+  * note:
+
+  * * <RepeatChance=x> - The skill will have x% chances to be repeated. E. g.:
+  * <RepeatChance=50>: 50% chance of being repeated.
+
+  * By default (in the plugin settings), a skill will be repeated only once,
+  * this can be changed by adding the following note:
+
+  * * <MaxRepeatTimes=x> - The skill can be repeated up to x times. E. g:
+  * <MaxRepeatTimes=2>: the skill will not be repeated more than 2 times.
+
+	@param Maximum repetitions default
+	@desc If the maximum repetitions tag is not used, this value will be.
+	@default 1
+*/
+
+/*:pt
   * @author Fogomax
   * @plugindesc Ao utilizar uma skill específica, há uma chance de usá-la
   * novamente
@@ -36,10 +67,10 @@
   * * <MaxRepeatTimes=x> - A habilidade poderá ser repetida até x vezes. Exemplo:
   * <MaxRepeatTimes=2>: a habilidade não será repetida mais de 2 vezes.
 
-	@param Máximo de repetições padrões
+	@param Maximum repetitions default
 	@desc Caso a tag de máximo de repetições não seja usada, esse valor será.
 	@default 1
- */
+*/
 
 var Imported = Imported || {};
 Imported["TTKC_DoubleSkillChance"] = "1.0.0";
@@ -56,7 +87,7 @@ TTK.DoubleSkillChance = {};
 	// Plugin global variables
 	//
 
-	$.defaultRepeatMax = parseInt($.Params['Máximo de repetições padrões']);
+	$.defaultRepeatMax = parseInt($.Params['Maximum repetitions default']);
 	$.repeatMax = 0;
 	$.repeatTimes = 0;
 	$.rate = 0;
