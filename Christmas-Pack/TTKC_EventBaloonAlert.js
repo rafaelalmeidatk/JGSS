@@ -1,16 +1,61 @@
 //=============================================================================
 // TTKC - Event Baloon Alert
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc If the player comes within an event, a balloon is displayed
+  * in the event
+
+  * <TTKC EventBaloonAlert>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * If the player comes within an event, a balloon is displayed in the event
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * For an event shows a balloon expression when the player come close, put
+  * the following tag in a comment:
+  *
+  * * <AlertBallon=x> - when the player comes close, it will display the
+  * expression balloon of ID x.
+  *
+  * The balloons ID are corresponding to the line that the balloon is in the
+  * image file. For example, the exclamation is the first balloon, so your ID
+  * is 1.
+  *
+  * To change the default distance (defined in the settings), use this tag:
+  *
+  * <AlertRange=x> - distance action will change to x (tiles).
+  *
+  * To change the setting of alert appears again or not (in the settings),
+  * use this tag:
+  *
+  * * <RepeatAlert=x> - Where x is: "true" (yes) ou "false" (no). Without
+  * the quotation marks.
+
+	@param Default distance
+	@desc If not provided a distance, it will be used (in tiles)
+	@default 2
+
+	@param Repeat Alert
+	@desc After displayed once, the balloon will continue to be displayed if
+	the player returns? Can be changed via comments. Yes: true | No: false
+	@default false
+*/
+
+/*:pt
   * @author Fogomax
   * @plugindesc Caso o jogador entre no raio de um evento, um balão é mostrado
   * no evento
@@ -46,15 +91,15 @@
   *
   * * <RepeatAlert=x> - sendo x: "true" (sim) ou "false" (não).
 
-	@param Distância padrão
+	@param Default distance
 	@desc Caso não seja fornecida uma distância, esta será usada (em tiles)
 	@default 2
 
-	@param Repetir alerta
+	@param Repeat Alert
 	@desc Após exibidos uma vez, o balão continuará sendo exibido caso o
 	jogador retorne? Pode ser mudado via comentários. Sim: true | Não: false
 	@default false
- */
+*/
 
 var Imported = Imported || {};
 Imported["TTKC_EventBaloonAlert"] = "1.0.0";
@@ -72,8 +117,8 @@ TTK.EventBaloonAlert = {};
 	//
 
 	$.alertsCharacters = [];
-	$.defaultRange = parseInt($.Params['Distância padrão']);
-	$.repeatAlert = ($.Params['Repetir alerta'] === 'true');
+	$.defaultRange = parseInt($.Params['Default distance']);
+	$.repeatAlert = ($.Params['Repeat Alert'] === 'true');
 
 	//-----------------------------------------------------------------------------
 	// Game_Event
