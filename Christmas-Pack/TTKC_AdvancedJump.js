@@ -106,12 +106,8 @@ TTK.AdvancedJump = {};
 
 	Game_Player.prototype.update = function(sceneActive) {
 		_Game_Player_update.call(this, sceneActive);
-		if (Input.isTriggered('A') && $.on) {
+		if (Input.isTriggered('A') && $.on)
 			this.advancedJump();
-		}
-
-		if (Input.isTriggered('teste'))
-			console.log("aa");
 	};
 
 	var _Game_Player_jump = Game_Player.prototype.jump;
