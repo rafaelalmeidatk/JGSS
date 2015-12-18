@@ -1,16 +1,49 @@
 //=============================================================================
 // TTKC - Advanced Jump
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc Allows the player to jump by pressing the A key
+
+  * <TTKC AdvancedJump>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Allows the player to jump by pressing the A key, he can jump through 
+  * obstacles.
+  *
+  * ===========================================================================
+  * ● How to use
+  * ===========================================================================
+  * If the hero has a distance, he will pass on walls. To avoid this, specify
+  * one or more Terrain IDs in the plugin settings and put that Terrains on
+  * walls and objects that do not allow the player to go through during jump.
+
+	@param Distance
+	@desc Distance of jump (tiles).
+	@default 2
+
+	@param Terrains not passable 
+	@desc Terrain whose jump is not possible (dont through). Numbers
+	separated by commas. Example: "1, 3, 4"
+	@default 1
+
+	@param Start on
+	@desc The jump will start on? Yes: true | No: false
+	@default true
+ */
+
+/*:pt
   * @author Fogomax
   * @plugindesc Permite que o jogador pule ao pressionar a tecla A
 
@@ -76,6 +109,9 @@ TTK.AdvancedJump = {};
 		if (Input.isTriggered('A') && $.on) {
 			this.advancedJump();
 		}
+
+		if (Input.isTriggered('teste'))
+			console.log("aa");
 	};
 
 	var _Game_Player_jump = Game_Player.prototype.jump;
