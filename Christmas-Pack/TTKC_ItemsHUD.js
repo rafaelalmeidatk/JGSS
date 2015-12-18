@@ -1,16 +1,59 @@
 //=============================================================================
 // TTKCC - Items HUD (v1.0.2)
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc Create a HUD items in a corner of the screen
+  *
+  * <TTKC ItemsHUD>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Create a HUD items in a corner of the screen, showing its icon and the
+  * amount of items that the team has.
+
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * Make the following calls in Plugin commands (3rd tab in the event
+  * commands):
+
+  * * ItemsHUD On - shows the HUD
+
+  * * ItemsHUD Off - hides HUD
+
+  * * ItemsHUD AddItem x - adds an item with ID x on the HUD
+
+  * * ItemsHUD RemoveItem x - removes an item with ID x on the HUD
+
+  * * ItemsHUD SetPosition x - put the HUD in the position "x" where "x" can
+  * be: "top" or "bottom" (without the quotation marks) E. g.:
+  * "ItemsHUD SetPosition bottom"
+
+    @param Items
+    @desc Place the ID of the initial items separated by commas. E.g.: 1, 2, 3
+    @default 1, 2
+
+    @param Initial vision
+    @desc The window will be appearing at the beginning of the game? Yes: true | No: false
+    @default false
+
+    @param Initial position
+    @desc "top" to appear on top of the screen and "bottom" to appear on bottom of the screen
+    @default top
+*/
+
+/*:pt
   * @author Fogomax
   * @plugindesc Cria uma HUD de itens em um canto da tela
 
@@ -39,21 +82,21 @@
   * * ItemsHUD RemoveItem position - coloca a HUD na posição "position", sendo
   * ela: "top": no topo da tela, "bottom": em baixo da tela
 
-    @param Itens
+    @param Items
     @desc Coloque o ID dos itens iniciais separados por vírgula. Exemplo: 1, 2, 3
     @default 1, 2
 
-    @param Visão inicial
+    @param Initial vision
     @desc A janela estará aparecendo no início do jogo? Sim: true | Não: false
     @default false
 
-    @param Posição inicial
+    @param Initial position
     @desc "top" para aparecer em cima da tela e "bottom" para aparecer embaixo da tela
     @default top
- */
+*/
 
 var Imported = Imported || {};
-Imported["TTKC_ItemsHUD"] = "1.0.1";
+Imported["TTKC_ItemsHUD"] = "1.0.2";
 
 var TTK = TTK || {};
 TTK.ItemsHUD = {};
@@ -67,9 +110,9 @@ TTK.ItemsHUD = {};
 	// Plugin global variables
 	//
 
-	$.items = $.Params['Itens'].split(',').map(Number).filter(Boolean);
-	$.on = ($.Params["Visão inicial"].toLowerCase() === 'true');
-	$.position = ($.Params['Posição inicial'].toLowerCase() === 'bottom' ? 1 : 0);
+	$.items = $.Params['Items'].split(',').map(Number).filter(Boolean);
+	$.on = ($.Params["Initial vision"].toLowerCase() === 'true');
+	$.position = ($.Params['Initial position'].toLowerCase() === 'bottom' ? 1 : 0);
 	$.lastItemsValues = [];
 
 	//-----------------------------------------------------------------------------
