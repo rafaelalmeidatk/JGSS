@@ -1,20 +1,61 @@
 //=============================================================================
 // TTKC - Class Terrain Passage
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc It allows a specific class has a different possibility on a 
+  * terrain
+  *
+  * <TTKC ClassTerrainPassage>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * It allows a specific class has a different possibility on a terrain
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * To change the possibility of a class in a terrain, enter the following tag
+  * in the class notes:
+  *
+  * * <TerrainPassage(x)=y> - Where x is a character:
+  *      o: Free passage
+  *      x: Blocked passage
+  *      i: inverts the passage (if its blocked then it becomes free, and if
+  *         its free then it becomes blocked)
+  *
+  *  And y is the number of land on which the passage will be changed,
+  *  separated by commas.
+  *
+  * ===========================================================================
+  * ● Example
+  * ===========================================================================
+  *
+  * * <TerrainPassage(o)=1> - The class will go through the tiles with terrain
+  *    1.
+  *
+  * * <TerrainPassage(x)=3, 4> - The class will not pass the tiles with terrain
+  *   3 and 4.
+  *
+  * * <TerrainPassage(i)=2> - The class will have the passage inverted by tiles
+  *   with terrain 2.
+ */
+
+/*:pt
   * @author Fogomax
   * @plugindesc Permite que uma classe específica tenha uma passibilidade
   * diferente em um terreno
-
+  *
   * <TTKC ClassTerrainPassage>
   * @help
   * ===========================================================================
@@ -47,10 +88,6 @@
   * 3 e 4
   * * <TerrainPassage(i)=2> - A classe terá a passagem invertida pelos tiles
   * com terreno 2.
-
-    @param Imagens
-    @desc Coloque o nome das imagens separadas por vírgula. Exemplo: Img1, Img2
-    @default Intro1, Intro2, Intro3
  */
 
 var Imported = Imported || {};
