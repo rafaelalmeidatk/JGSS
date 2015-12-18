@@ -1,18 +1,61 @@
 //=============================================================================
 // TTKC - Detect Picture Click
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
   * @author Fogomax
+  * @plugindesc Detect the click and pressing in a specific picture
+  *
+  * <TTKC DetectPictureClick>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Detect the click and pressing in a specific picture
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * The following commands should be used in Plugin Commands:
+  *
+  * * DetectPictureClick On x - actives detection in the picture with ID x
+  *
+  * * DetectPictureClick Off x - disables detection in the picture with ID x
+  *
+  * These must be used in a Conditional structure by script:
+  *
+  * * DetectPictureClick.Click(x) - checks the click in the picture with ID x
+  *
+  * * DetectPictureClick.Press(x) - checks the pressing in the picture with
+  * ID x. This event is returned several times per second.
+  *
+  * ===========================================================================
+  * ● Observations
+  * ===========================================================================
+  * For the Click and Press commands works, the detection of the picture need
+  * be activated previously. Otherwise the conditions will never be true.
+
+    @param Click stop movement
+    @desc By clicking a detectable image, the player will not walk. Yes: true | No: false
+    @default true
+
+    @param Press stop movement
+    @desc By pressing a detectable image, the player will not walk. Yes: true | No: false
+    @default true
+*/
+
+/*:pt
+  * @author Fogomax
   * @plugindesc Detecta o clique e o pressionamento em uma picture específica
+  *
   * <TTKC DetectPictureClick>
   * @help
   * ===========================================================================
@@ -40,7 +83,7 @@
   * ● Observações
   * ===========================================================================
   * Para que os comandos Click e Press funcionem, a verificação do ID deve ser
-  * ativado previamente. Caso contrário, a condição nunca será verdadeira.
+  * ativada previamente. Caso contrário, a condição nunca será verdadeira.
 
     @param Clique interromper movimento
     @desc Ao clicar em uma imagem detectável, o jogador não andará. Sim: true | Não: false
@@ -49,7 +92,7 @@
     @param Pressionamento interromper movimento
     @desc Ao pressionar uma imagem detectável, o jogador não andará. Sim: true | Não: false
     @default true
- */
+*/
 
 var Imported = Imported || {};
 Imported["TTKC_DetectPictureClick"] = "1.0.0";
