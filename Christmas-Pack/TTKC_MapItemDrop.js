@@ -1,16 +1,81 @@
 //=============================================================================
 // TTKC - Map Item Drop
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc Allows items to be thrown to the ground, these items can be
+  * collected by the player.
+  * <TTKC MapItemDrop>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Allows items to be thrown to the ground, these items can be collected by
+  * the player.
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * Call the following commands in Plugin commands:
+  *
+  * * MapItemDrop Drop x Here - throw the item with ID x in the same position
+  * of the event, do not use in common events with parallel process or 
+  * automatic start.
+  *
+  * If you want to specify a position for the item, use the command:
+  *
+  * * MapItemDrop Drop z Position x y - throw the item with ID z in the tiles
+  * x and y of the map.
+  *
+  * There are also additional options:
+  *
+  * * MapItemDrop Drop x Here Floating - throw the item with ID x in the same position
+  * of the event, the item will stay afloat.
+  *
+  * * MapItemDrop Drop x Here ThrowUp - throw the item with ID x in the same position
+  * of the event, the item will be thrown up.
+  * 
+  * * MapItemDrop Drop x Here Duration y - throw the item with ID x in the same position
+  * of the event, after x SECONDS the item will disappear.
+  *
+  * ===========================================================================
+  * ● Important notes
+  * ===========================================================================
+  * Specify the "Drop x" and a position ("Position XY" or "Here") is required.
+  * Options can be placed in any order of command. Examples:
+  *
+  * * MapItemDrop Drop 1 Here Floating ThrowUp - throw the item with ID x in the same position
+  * of the event, it will be thrown up and will be floating.
+  *
+  * * MapItemDrop Drop 3 Position 2 3 Floating - throw the item with ID 3 in
+  * the tiles 2 (x) e 3 (y), it will be floating.
+  * 
+
+	@param How to collect the item
+	@desc 0 to collect going over, 1 to collect by pressing the action button
+	(Z, Space or Enter)
+	@default 0
+
+	@param Sound when collecting the item
+	@desc Play a sound when collecting an item. Yes: true | No: false
+	@default true
+
+    @param Throw errors
+    @desc Forgetting to specify a required value in plugin commands, an error
+    is triggered (recommended for development)
+    @default true
+ */
+
+/*:pt
   * @author Fogomax
   * @plugindesc Permite que sejam jogados itens no chão, tais itens podem ser
   * recolhidos pelo jogador.
@@ -25,7 +90,7 @@
   * ===========================================================================
   * ● Como usar
   * ===========================================================================
-  * Chame os seguinte comandos no Comandos de Plugin:
+  * Chame os seguintes comandos no Comandos de Plugin:
   *
   * * MapItemDrop Drop x Here - joga o item de ID x na mesma posição do evento,
   * não utilize em eventos comuns em processo paralelo ou início automático.
@@ -41,7 +106,7 @@
   * do evento, o item irá ficar flutuando.
   *
   * * MapItemDrop Drop x Here ThrowUp - joga o item de ID x na mesma posição
-  * do evento, o item irá ser arremesado para cima.
+  * do evento, o item irá ser arremessado para cima.
   * 
   * * MapItemDrop Drop x Here Duration y - joga o item de ID x na mesma posição
   * do evento, após y SEGUNDOS o item sumirá.
@@ -59,16 +124,16 @@
   * * MapItemDrop Drop 3 Position 2 3 Floating - joga o item de ID 3 nos tiles
   * 2 (x) e 3 (y), ele ficará flutuando.
 
-	@param Forma de recolher o item
+	@param How to collect the item
 	@desc 0 para recolher ao passar por cima, 1 para recolher ao pressionar
 	o botão de ação (Z, Espaço ou Enter)
 	@default 0
 
-	@param Som ao recolher o item
+	@param Sound when collecting the item
 	@desc Tocar um som ao recolher um item. Sim: true | Não: false
 	@default true
 
-    @param Lançar erros
+    @param Throw errors
     @desc Ao esquecer de especificar um valor obrigatório nos comandos de
     plugin, um erro é disparado (recomendado para desenvolvimento)
     @default true
@@ -89,9 +154,9 @@ TTK.MapItemDrop = {};
 	// Plugin global variables
 	//
 
-	$.pickType = parseInt($.Params['Forma de recolher o item']);
-	$.playSound = ($.Params['Som ao recolher o item'] === 'true');
-	$.throwErrors = ($.Params['Lançar erros'] === 'true');
+	$.pickType = parseInt($.Params['How to collect the item']);
+	$.playSound = ($.Params['Sound when collecting the item'] === 'true');
+	$.throwErrors = ($.Params['Throw errors'] === 'true');
 	$.mapDrops = [];
 
 	//-----------------------------------------------------------------------------
@@ -324,6 +389,4 @@ TTK.MapItemDrop = {};
 			SceneManager._scene.addMapItemDrop(id, pos, throwUp, floating, duration);
   		}
   	};
-
-
 })(TTK.MapItemDrop);
