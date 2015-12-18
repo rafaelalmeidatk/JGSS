@@ -85,11 +85,11 @@
   * Para que os comandos Click e Press funcionem, a verificação do ID deve ser
   * ativada previamente. Caso contrário, a condição nunca será verdadeira.
 
-    @param Clique interromper movimento
+    @param Click stop movement
     @desc Ao clicar em uma imagem detectável, o jogador não andará. Sim: true | Não: false
     @default true
 
-    @param Pressionamento interromper movimento
+    @param Press stop movement
     @desc Ao pressionar uma imagem detectável, o jogador não andará. Sim: true | Não: false
     @default true
 */
@@ -109,8 +109,8 @@ TTK.DetectPictureClick = {};
 	// Plugin global variables
 	//
 
-	$.clickStopPlayerMove = ($.Params['Clique interromper movimento'] === 'true');
-	$.pressStopPlayerMove = ($.Params['Pressionamento interromper movimento'] === 'true');
+	$.clickStopPlayerMove = ($.Params['Click stop movement'] === 'true');
+	$.pressStopPlayerMove = ($.Params['Press stop movement'] === 'true');
 	$.pictures = [];
 	$.picturesResults = [];
 	$.playerCanMove = true;
