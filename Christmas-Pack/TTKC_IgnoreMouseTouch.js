@@ -1,16 +1,50 @@
 //=============================================================================
 // TTKC - Ignore Mouse & Touch
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc Remove the mouse and touch functionality in the game, this
+  * feature can be turned on / off
+  * <TTKC IgnoreMouseTouch>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Remove the functionality of the mouse and touch in the game. However, this
+  * can be enabled or disabled in the course of it.
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * By default the mouse and touch comes off (in the settings), but if you want
+  * to change it during the game, make the following calls in the Plugin
+  * Command:
+  *
+  * * IgnoreMouseTouch On - activate the plugin, the mouse and touch will be
+                            ignored
+  * * IgnoreMouseTouch Off - disable the plugin, the mouse and touch will work
+  *
+  * ===========================================================================
+  * ● Important note
+  * ===========================================================================
+  * For this plugin also has an effect on others, and not just in engine
+  * standards, put it as the last plugin in the list.
+
+    @param Start on
+    @desc The mouse and the touch will start disabled? Yes: true | No: false
+    @default true
+ */
+
+/*:pt
   * @author Fogomax
   * @plugindesc Remove a funcionalidade do mouse e do touch no jogo, tal
   * funcionalidade pode ser ligada/desligada
@@ -19,20 +53,27 @@
   * ===========================================================================
   * ● Explicação
   * ===========================================================================
-  * Remove a funcionalidade do mouse e do touch, no entanto, isso pode ser
-  * ativado ou desativado no decorrer do jogo.
+  * Remove a funcionalidade do mouse e do touch no jogo. No entanto, isso pode
+  * ser ativado ou desativado no decorrer dele.
   *
   * ===========================================================================
   * ● Como usar
   * ===========================================================================
-  * Por padrão o mouse e o touch já vem desativados, mas caso você queira mudar
-  * isso durante o jogo, faça as seguintes chamadas no Comando de Plugin:
+  * Por padrão o mouse e o touch já vem desativados (nas configurações), mas
+  * caso você queira mudar isso durante o jogo, faça as seguintes chamadas no
+  * Comando de Plugin:
   *
   * * IgnoreMouseTouch On - ativa o plugin, o mouse e o touch serão ignorados
   * * IgnoreMouseTouch Off - desativa o plugin, o mouse e o touch funcionarão
+  *
+  * ===========================================================================
+  * ● Observação importante
+  * ===========================================================================
+  * Para que esse plugin também tenha efeito sobre os outros, e não apenas nos
+  * originais da engine, coloque-o como último plugin na lista.
 
     @param Inicio ligado
-    @desc O mouse iniciará desligado? Sim: true | Não: false
+    @desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
     @default true
  */
 
