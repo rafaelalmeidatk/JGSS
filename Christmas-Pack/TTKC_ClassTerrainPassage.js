@@ -99,8 +99,6 @@ TTK.ClassTerrainPassage = {};
 "use strict";
 
 (function($) {
-	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC ClassTerrainPassage>'); })[0].parameters;
-
 	//-----------------------------------------------------------------------------
 	// Plugin global variables
 	//
