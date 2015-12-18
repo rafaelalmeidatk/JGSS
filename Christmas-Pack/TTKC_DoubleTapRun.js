@@ -1,19 +1,35 @@
 //=============================================================================
 // TTKC - Double Tap Run
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
   * @author Fogomax
-  * @plugindesc Ativa o dash ao pressionar a tecla de andar duas vezes rapidamente
+  * @plugindesc Activate the dash by pressing the walk button twice quickly
+  *
+  * <TTKC DoubleTapRun>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * By pressing the walk button twice quickly the hero will run
 
+    @param Press time
+    @desc The time the player has to press the button again to the hero dash
+    @default 10
+ */
+
+/*:pt
+  * @author Fogomax
+  * @plugindesc Ativa o dash ao pressionar a tecla de andar duas vezes rapidamente
+  *
   * <TTKC DoubleTapRun>
   * @help
   * ===========================================================================
