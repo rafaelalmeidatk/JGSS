@@ -29,18 +29,18 @@
   * one or more Terrain IDs in the plugin settings and put that Terrains on
   * walls and objects that do not allow the player to go through during jump.
 
-	@param Distance
-	@desc Distance of jump (tiles).
-	@default 2
+  @param Distance
+  @desc Distance of jump (tiles).
+  @default 2
 
-	@param Terrains not passable 
-	@desc Terrain whose jump is not possible (dont through). Numbers
-	separated by commas. Example: "1, 3, 4"
-	@default 1
+  @param Terrains not passable
+  @desc Terrain whose jump is not possible (dont through). Numbers
+  separated by commas. Example: "1, 3, 4"
+  @default 1
 
-	@param Start on
-	@desc The jump will start on? Yes: true | No: false
-	@default true
+  @param Start on
+  @desc The jump will start on? Yes: true | No: false
+  @default true
  */
 
 /*:pt
@@ -63,18 +63,18 @@
   * e coloque esses terrenos nas paredes e em objetos que não permitam que o
   * o jogador atravesse durante o pulo.
 
-	@param Distância
-	@desc Distância do pulo (em tiles).
-	@default 2
+  @param Distance
+  @desc Distância do pulo (em tiles).
+  @default 2
 
-	@param Terrenos não passáveis
-	@desc Terrenos cujo pulo não será possível (não atravessará). Números
-	separados por vírgula. Exemplo: "1, 3, 4"
-	@default 1
+  @param Terrains not passable
+  @desc Terrenos cujo pulo não será possível (não atravessará). Números
+  separados por vírgula. Exemplo: "1, 3, 4"
+  @default 1
 
-	@param Iniciar ligado
-	@desc O pulo iniciará ligado? Sim: true | Não: false
-	@default true
+  @param Start on
+  @desc O pulo iniciará ligado? Sim: true | Não: false
+  @default true
  */
 
 var Imported = Imported || {};
@@ -92,12 +92,11 @@ TTK.AdvancedJump = {};
 	// Plugin global variables
 	//
 
-	$.terrains = $.Params['Terrenos não passáveis'].split(',').map(Number);
-	$.distance = parseInt($.Params['Distância']);
-	$.on = ($.Params['Iniciar ligado'] === 'true');
+	$.terrains = $.Params['Terrains not passable'].split(',').map(Number);
+	$.distance = parseInt($.Params['Distance']);
+	$.on = ($.Params['Start on'] === 'true');
 	Input.keyMapper[65] = "A";
 	
-
 	//-----------------------------------------------------------------------------
 	// Game_Player
 	//
