@@ -1,16 +1,46 @@
 //=============================================================================
 // TTKC - Simple HUD
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc Displays information about the first team player
+
+  * <TTKC SimpleHUD>
+  * @help
+  * ===========================================================================
+  * ● Explicação
+  * ===========================================================================
+  * Displays information about the first team player: name, HP, MP and level
+  *
+  * ===========================================================================
+  * ● Important notes
+  * ===========================================================================
+  * The HUD displays the first group member information (the leader), if it is
+  * changed, the HUD will update automatically.
+
+	@param Initial visibility
+	@desc The HUD will start visible? Yes: true | No: false
+	@default true
+
+	@param Font size
+	@desc Font size of the HUD
+	@default 16
+
+	@param Opacity
+	@desc Window transparency amount. 0 = 100% transparent, 255 = 100% opaque.
+	@default 200
+*/
+
+/*:pt
   * @author Fogomax
   * @plugindesc Exibe informações sobre o primeiro jogador da equipe
 
@@ -27,19 +57,19 @@
   * A HUD exibe as informações do primeiro membro do grupo (o líder), caso ele
   * seja mudado, a HUD irá se atualizar automaticamente.
 
-	@param Visibilidade inicial
+	@param Initial visibility
 	@desc A HUD iniciará visível? Sim: true | Não: false
 	@default true
 
-	@param Tamanho da fonte
+	@param Font size
 	@desc Tamanho da fonte na HUD
 	@default 16
 
-	@param Opacidade
+	@param Opacity
 	@desc Quantidade de transparência da janela. 0 = 100% transparente,
 	255 = 100% opaco.
 	@default 200
- */
+*/
 
 var Imported = Imported || {};
 Imported["TTKC_SimpleHUD"] = "1.0.0";
@@ -56,9 +86,9 @@ TTK.SimpleHUD = {};
 	// Plugin global variables
 	//
 
-	$.on = ($.Params['Visibilidade inicial'] === 'true');
-	$.fontSize = parseInt($.Params['Tamanho da fonte']);
-	$.opacity = parseInt($.Params['Opacidade']);
+	$.on = ($.Params['Initial visibility'] === 'true');
+	$.fontSize = parseInt($.Params['Font size']);
+	$.opacity = parseInt($.Params['Opacity']);
 
 	//-----------------------------------------------------------------------------
 	// Scene_Map
