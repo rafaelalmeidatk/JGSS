@@ -1,19 +1,60 @@
 //=============================================================================
 // TTKC - Slideshow Intro
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
   * @author Fogomax
-  * @plugindesc Cria uma introdução com um slideshow de imagens
+  * @plugindesc Creates an introduction with an image slideshow
+  *
+  * <TTKC SlideshowIntro>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Creates an introduction with an image slideshow
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * Put the name of the images, in order, in the settings. They should be in
+  * the "img/Pictures" folder and must be in the extension ".png."
 
+    @param Images
+    @desc Put the name of the images separated by commas. Example: img1, img2
+    @default Intro1, Intro2, Intro3
+
+    @param Delay
+    @desc The time each image will be on the screen (in frames, 60 = 1s)
+    @default 120
+
+    @param Amount of opacity increment
+    @desc The amount of opacity to be increased for each loop, the greater
+    value the faster the image will appear. 0 for an instant change.
+    @default 3
+
+    @param Skip intro by pressing button
+    @desc The introduction will be skipped when the keys Z, Space or Enter
+    is pressed. Yes: true | No: false
+    @default true
+
+    @param Scene to go when finish
+    @desc Next scene after the end of the introduction. Do not change unless
+    you know what you're doing
+    @default Scene_Title
+*/
+
+/*:pt
+  * @author Fogomax
+  * @plugindesc Cria uma introdução com um slideshow de imagens
+  *
   * <TTKC SlideshowIntro>
   * @help
   * ===========================================================================
@@ -27,7 +68,7 @@
   * Coloque o nome das imagens, em ordem, nas configurações. Elas devem estar
   * na pasta img/Pictures e devem estar na extenção ".png".
 
-    @param Imagens
+    @param Images
     @desc Coloque o nome das imagens separadas por vírgula. Exemplo: Img1, Img2
     @default Intro1, Intro2, Intro3
 
@@ -35,21 +76,21 @@
     @desc O tempo que cada imagem ficará na tela (em frames, 60 = 1s)
     @default 120
 
-    @param Incremento de opacidade
+    @param Amount of opacity increment
     @desc A quantidade de opacidade que será aumentada a cada loop, quanto
     maior o valor mais rápido a imagem aparecerá. 0 para mudança instantânea.
     @default 3
 
-    @param Encerrar introdução ao apertar tecla
+    @param Skip intro by pressing button
     @desc A introdução será pulada quando as teclas Z, Espaço ou Enter forem
     pressionadas. Sim: true | Não: false
     @default true
 
-    @param Scene ao término
+    @param Scene to go when finish
     @desc Próxima scene após o término da introdução. Não mexa se não souber
     o que está fazendo
     @default Scene_Title
- */
+*/
 
 var Imported = Imported || {};
 Imported["TTKC_SlideshowIntro"] = "1.0.0";
@@ -66,11 +107,11 @@ TTK.SlideshowIntro = {};
 	// Plugin global variables
 	//
 
-	$.imagesName = $.Params['Imagens'].split(',').map(function(w) { return w.trim(); });
+	$.imagesName = $.Params['Images'].split(',').map(function(w) { return w.trim(); });
 	$.delay = parseInt($.Params['Delay']);
-	$.opacityInc = parseInt($.Params['Incremento de opacidade']);
-	$.jumpIfPress = ($.Params['Encerrar introdução ao apertar tecla'] === 'true');
-	$.nextScene = eval($.Params['Scene ao término']);
+	$.opacityInc = parseInt($.Params['Amount of opacity increment']);
+	$.jumpIfPress = ($.Params['Skip intro by pressing button'] === 'true');
+	$.nextScene = eval($.Params['Scene to go when finish']);
 	$.images = [];
 	$.imagesLoaded = false;
 
