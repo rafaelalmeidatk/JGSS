@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Simple Event Popup Name
+// TTKC - Simple Event Popup Name (v1.0.1)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -82,7 +82,7 @@
  */
 
 var Imported = Imported || {};
-Imported["TTKC_SimpleEventPopupName"] = "1.0.0";
+Imported["TTKC_SimpleEventPopupName"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.SimpleEventPopupName = {};
@@ -196,17 +196,23 @@ TTK.SimpleEventPopupName = {};
 		this._limitFloatY = [this.y - 5, this.y + 5];
 		this._floatYSide = 0;
 		this._floatTick = 0;
+		this._dontMoveY = false;
+		this._dontFloat = false;
 	}
 
 	EventPopupName.prototype.update = function() {
 		if (this._target.screenX() != this._lastPos[0] || this._target.screenY() != this._lastPos[1]) {
+			this._lastY = this.y;
+			if (this._target.screenY() == this._lastPos[1])
+				this._dontMoveY = true;
+			else
+				this._dontFloat = true;
 			this.setInitialPos();
 			this._lastPos[0] = this._target.screenX();
 			this._lastPos[1] = this._target.screenY();
-			if (this._floatPopup) this.y = this._limitFloatY[0];
 		}
 
-		if (this._floatPopup && this._floatTick <= 0) {
+		if (this._floatPopup && this._floatTick <= 0 && !this._dontFloat) {
 			if (this._floatYSide === 0) {
 				this.y++;
 				if (this.y >= this._limitFloatY[1])
@@ -224,6 +230,8 @@ TTK.SimpleEventPopupName = {};
 			this.x = this._target.screenX() - 150;
 			this.y = this._target.screenY() - this.bitmap.fontSize - 48 - this._offsetY;
 		}
+
+		if (this._dontFloat) this._dontFloat = false;
 
 		if (this._name != this._lastName) {
 			this.bitmap.clear();
@@ -247,7 +255,11 @@ TTK.SimpleEventPopupName = {};
 
 	EventPopupName.prototype.setInitialPos = function() {
 		this.x = this._target.screenX() - 150;
-		this.y = this._target.screenY() - this.bitmap.fontSize - 48 - this._offsetY;
+		if (!this._dontMoveY) {
+			this.y = this._target.screenY() - this.bitmap.fontSize - 48 - this._offsetY;
+			this._limitFloatY = [this.y - 5, this.y + 5];
+		}
+		if (this._dontMoveY) this._dontMoveY = false;
 	}
 
 	EventPopupName.prototype.remove = function() {
