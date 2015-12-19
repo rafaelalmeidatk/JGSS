@@ -1,16 +1,52 @@
 //=============================================================================
 // TTKC - Simple Event Popup Name
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
 
 //=============================================================================
-// * Esse plugin faz parte do meu pack de Natal, que contém varios outros
-// * plugins simples e úteis. Link para o pack completo:
+// * This plugin is part of my Christmas pack, which contains several other
+// * simple and useful plugins. Link to the full pack:
 // * https://github.com/rafaelalmeidatk/JGSS/tree/master/Christmas-Pack
 //=============================================================================
- 
+
 /*:
+  * @author Fogomax
+  * @plugindesc Adds a popup with a name in events
+  *
+  * <TTKC SimpleEventPopupName>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Adds a popup with a name in events
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * Place the following tag within a comment in the desired page of the event:
+  *
+  * * <PopupName=x> - Creates a popup with the name "x".
+  *                   Example: <PopupName = Max>
+  *
+  * Custom tags (must be accompanied name):
+  *
+  * * <FloatPopup> - The popup will be floating
+  *
+  * * <PopupOffset=x> - The popup will rise x pixels. This tag accepts negative
+  *                     numbers, they will make the popup go down.
+
+    @param Font size
+    @desc Font size
+    @default 18
+
+    @param Offset Y
+    @desc Standard distance of the popup from the event in the Y axis.
+    Positive numbers will rise, negative will make it go down.
+    @default 10
+ */
+
+/*:pt
   * @author Fogomax
   * @plugindesc Adiciona um popup com um nome em eventos
   * <TTKC SimpleEventPopupName>
@@ -35,7 +71,7 @@
   * * <PopupOffset=x> - O popup subirá x pixels. Essa tag aceita números
   * negativos, eles irão fazer o popup descer.
 
-    @param Tamanho da fonte
+    @param Font size
     @desc Tamanho da fonte
     @default 18
 
@@ -60,7 +96,7 @@ TTK.SimpleEventPopupName = {};
 	// Plugin global variables
 	//
 
-	$.fontSize = parseInt($.Params['Tamanho da fonte']);
+	$.fontSize = parseInt($.Params['Font size']);
 	$.defaultOffset = parseInt($.Params['Offset Y']);
 
 	//-----------------------------------------------------------------------------
