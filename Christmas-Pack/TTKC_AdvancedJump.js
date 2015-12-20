@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Advanced Jump
+// TTKC - Advanced Jump (v1.1.0)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -28,6 +28,16 @@
   * If the hero has a distance, he will pass on walls. To avoid this, specify
   * one or more Terrain IDs in the plugin settings and put that Terrains on
   * walls and objects that do not allow the player to go through during jump.
+  *
+  * To change the distance of the jump during the game, use this Plugin
+  * Command:
+  *
+  * * AdvancedJump Distance x - The jump will change to x tiles
+  *
+  * To on/off the jump, use this command:
+  *
+  * * AdvancedJump x - Where x: "On" or "Off"
+
 
   @param Distance
   @desc Distance of jump (tiles).
@@ -62,6 +72,15 @@
   * ocorra, especifique um ou mais IDs de terreno nas configurações do plugin
   * e coloque esses terrenos nas paredes e em objetos que não permitam que o
   * o jogador atravesse durante o pulo.
+  *
+  * Para mudar a distância do pulo durante o jogo, utilize esse Comando de
+  * Plugin:
+  *
+  * * AdvancedJump Distance x - O pulo mudará para x tiles
+  *
+  * Para ligar/desligar o pulo, utilize esse comando:
+  *
+  * * AdvancedJump x - Sendo x: "On" (ligado) ou "Off" (desligado)
 
   @param Distance
   @desc Distância do pulo (em tiles).
@@ -78,7 +97,7 @@
  */
 
 var Imported = Imported || {};
-Imported["TTKC_AdvancedJump"] = "1.0.0";
+Imported["TTKC_AdvancedJump"] = "1.1.0";
 
 var TTK = TTK || {};
 TTK.AdvancedJump = {};
@@ -180,6 +199,10 @@ TTK.AdvancedJump = {};
 
   				case "off":
   					$.on = false;
+  					break;
+
+  				case "distance":
+  					$.distance = parseInt(args[1]);
   					break;
   			}
   		}
