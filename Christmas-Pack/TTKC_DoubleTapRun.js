@@ -36,8 +36,8 @@
   * ● Explicação
   * ===========================================================================
   * Ao pressionar a tecla de andar duas vezes rapidamente o herói irá correr
-
-    @param Tempo de pressionamento
+  
+    @param Press time
     @desc O tempo que o jogador tem para pressionar a tecla novamente para o herói correr
     @default 10
  */
@@ -57,7 +57,7 @@ TTK.DoubleTapRun = {};
 	// Plugin global variables
 	//
 
-	$.pressTime = parseInt($.Params['Tempo de pressionamento']);
+	$.pressTime = parseInt($.Params['Press time']);
 	$.isDashing = false;
 	$.dashTick = 0;
 	$.keyControl = false;
