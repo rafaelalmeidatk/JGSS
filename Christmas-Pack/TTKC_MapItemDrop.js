@@ -189,8 +189,7 @@ TTK.MapItemDrop = {};
 	//
 
 	Spriteset_Map.prototype.addMapItemDrop = function(instance) {
-		this._tilemap.addChild(instance);
-		this._tilemap.refresh();
+		this._baseSprite.addChild(instance);
 	}
 
 	Spriteset_Map.prototype.removeMapItemDrop = function(instance) {
@@ -255,8 +254,6 @@ TTK.MapItemDrop = {};
 		this._lastPos = [-1, -1];
 		this.setPosition();
 		this._limitFloatY = [this.y - 5, this.y + 5];
-		this._dontMoveY = false;
-		this._dontFloat = false;
 		this._throwY = 0;
 		this.drawIcon();
 	}
@@ -346,8 +343,6 @@ TTK.MapItemDrop = {};
 			this._throwMin = this.y - 30;
 			this._throwMax = this.y;
 		}
-
-		if (this._dontMoveY) this._dontMoveY = false;
 	}
 
 	Drop_Sprite.prototype.drawIcon = function() {
