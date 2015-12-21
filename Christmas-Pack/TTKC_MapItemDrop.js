@@ -189,7 +189,8 @@ TTK.MapItemDrop = {};
 	//
 
 	Spriteset_Map.prototype.addMapItemDrop = function(instance) {
-		this._baseSprite.addChild(instance);
+		this._tilemap.addChild(instance);
+		this._tilemap.refresh();
 	}
 
 	Spriteset_Map.prototype.removeMapItemDrop = function(instance) {
@@ -251,14 +252,35 @@ TTK.MapItemDrop = {};
 		this.floatingIcon = floating;
 		this._tileX = tileX;
 		this._tileY = tileY;
+		this._lastPos = [-1, -1];
 		this.setPosition();
 		this._limitFloatY = [this.y - 5, this.y + 5];
+		this._dontMoveY = false;
+		this._dontFloat = false;
+		this._throwY = 0;
 		this.drawIcon();
 	}
 
 	Drop_Sprite.prototype.update = function() {
 		if (this._removed)
 			return;
+
+		this._incY = 0;
+		this._incX = 0;
+
+		if (this.screenX() != this._lastPos[0] || this.screenY() != this._lastPos[1]) {
+			this._incX += this.screenX() - this._lastPos[0];
+			this._incY += this.screenY() - this._lastPos[1];
+
+			this._throwMin += this._incY;
+			this._throwMax += this._incY;
+
+			this._limitFloatY[0] += this._incY;
+			this._limitFloatY[1] += this._incY;
+
+			this._lastPos[0] = this.screenX();
+			this._lastPos[1] = this.screenY();
+		}
 
 		if (this._removing)
 			this.updateRemove();
@@ -299,6 +321,9 @@ TTK.MapItemDrop = {};
 		} else if (this.floatingIcon) {
 			this._floatTick--;
 		}
+
+		this.y += this._incY;
+		this.x += this._incX;
 	}
 
 	Drop_Sprite.prototype.updateRemove = function() {
@@ -312,14 +337,17 @@ TTK.MapItemDrop = {};
 	}
 
 	Drop_Sprite.prototype.setPosition = function() {
-		this.x = this._tileX * 48 + 8;
+		this.x = this.screenX();
+		this.y = this.screenY();
+		this._lastPos[0] = this.screenX();
+		this._lastPos[1] = this.screenY();	
+
 		if (this._throwUp) {
-			this.y = this._tileY * 48;
 			this._throwMin = this.y - 30;
 			this._throwMax = this.y;
 		}
-		else
-			this.y = this._tileY * 48 + 8;
+
+		if (this._dontMoveY) this._dontMoveY = false;
 	}
 
 	Drop_Sprite.prototype.drawIcon = function() {
@@ -334,6 +362,16 @@ TTK.MapItemDrop = {};
 	Drop_Sprite.prototype.remove = function() {
 		this._removing = true;
 	}
+
+	Drop_Sprite.prototype.screenX = function() {
+	    var tw = $gameMap.tileWidth();
+	    return Math.round($gameMap.adjustX(this._tileX) * tw + 8);
+	};
+
+	Drop_Sprite.prototype.screenY = function() {
+	    var ty = $gameMap.tileHeight();
+	    return Math.round($gameMap.adjustY(this._tileY) * ty + 8);
+	};
 
 	//-----------------------------------------------------------------------------
 	// Input
@@ -377,13 +415,13 @@ TTK.MapItemDrop = {};
 				pos[0] = args[args.indexOf('position') + 1];
 				pos[1] = args[args.indexOf('position') + 2];
 			} else if ($.throwErrors) {
-				throw new Error('Map Item Drop: Posição não especificada');
+				throw new Error('Map Item Drop: Position unspecified');
 			} else {
 				return;
 			}
 
 			if (id === 0 && $.throwErrors)
-				throw new Error('Map Item Drop: ID do item não especificado');
+				throw new Error('Map Item Drop: Item ID unspecified');
 			else if (id === 0)
 				return;
 			SceneManager._scene.addMapItemDrop(id, pos, throwUp, floating, duration);
