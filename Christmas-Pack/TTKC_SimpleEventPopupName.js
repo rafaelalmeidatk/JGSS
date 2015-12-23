@@ -117,12 +117,6 @@ TTK.SimpleEventPopupName = {};
 	// Game_Event
 	//
 
-	_Game_Event_initialize = Game_Event.prototype.initialize;
-
-	Game_Event.prototype.initialize = function(mapId, eventId) {
-		_Game_Event_initialize.call(this, mapId, eventId);
-	};
-
 	var _Game_Event_setupPage = Game_Event.prototype.setupPage;
 
 	Game_Event.prototype.setupPage = function() {
@@ -188,7 +182,8 @@ TTK.SimpleEventPopupName = {};
 		this._target = target;
 		this._floatPopup = floatPopup;
 		this._offsetY = offset;
-		this.bitmap = new Bitmap(300, 48);
+		var width = name.length * ($.fontSize + 2);
+		this.bitmap = new Bitmap(width, $.fontSize);
     	this.bitmap.fontSize = $.fontSize;
     	this.setInitialPos();
 		this._lastPos = [-1, -1];
@@ -227,15 +222,14 @@ TTK.SimpleEventPopupName = {};
 		} else if (this._floatPopup) {
 			this._floatTick--;
 		} else if (!this._floatPopup) {
-			this.x = this._target.screenX() - 150;
-			this.y = this._target.screenY() - this.bitmap.fontSize - 48 - this._offsetY;
+			this.setInitialPos();
 		}
 
 		if (this._dontFloat) this._dontFloat = false;
 
 		if (this._name != this._lastName) {
 			this.bitmap.clear();
-			this.bitmap.drawText(this._name, 0, 0, 300, this.bitmap.fontSize, "center");
+			this.bitmap.drawText(this._name, 0, 0, this.bitmap.width, this.bitmap.fontSize, "center");
 			this._lastName = this._name;
 		}
 	}
@@ -254,7 +248,7 @@ TTK.SimpleEventPopupName = {};
 	}
 
 	EventPopupName.prototype.setInitialPos = function() {
-		this.x = this._target.screenX() - 150;
+		this.x = this._target.screenX() - (this.bitmap.width / 2);
 		if (!this._dontMoveY) {
 			this.y = this._target.screenY() - this.bitmap.fontSize - 48 - this._offsetY;
 			this._limitFloatY = [this.y - 5, this.y + 5];
