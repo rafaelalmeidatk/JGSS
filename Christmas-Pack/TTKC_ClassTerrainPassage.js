@@ -129,7 +129,6 @@ TTK.ClassTerrainPassage = {};
                 else
                     return $.symbolMap[passageInfo[1].toLowerCase()];
             } else {
-            console.log("a");
                 return _Game_Player_isMapPassable.call(this, x, y, d);
             }
         } else {
