@@ -28,6 +28,10 @@
 	@param Cancel player move
 	@desc Cancel the player move when the camera is moved
 	@default true
+	
+	@param Speed
+	@desc Speed of move (the higher the faster). E. g.: 2.3.
+	@default 1
 */
 
 "use strict";
@@ -47,6 +51,7 @@ TTK.DraggableCamera = {};
 
 	$.cancelPlayerMove = ($.Params["Cancel player move"].toLowerCase() === 'true');
 	$.enabled = ($.Params["Start on"].toLowerCase() === 'true');
+	$.speed = parseFloat($.Params["Speed"]);
 	$.denyMove = false;
 
 	//-----------------------------------------------------------------------------
@@ -138,8 +143,9 @@ TTK.DraggableCamera = {};
 	Scene_Map.prototype.update = function() {
 		_Scene_Map_update.call(this);
 		if (TouchInput.isMoved() && $.enabled) {
-			var newX = (TouchInput._lastCameraX - TouchInput.x) / 48;
-			var newY = (TouchInput._lastCameraY - TouchInput.y) / 48;
+			var newX = ((TouchInput._lastCameraX - TouchInput.x) / 48) * $.speed;
+			var newY = ((TouchInput._lastCameraY - TouchInput.y) / 48) * $.speed;
+
 			if (newX)
 				$gameMap._displayX += newX;
 
