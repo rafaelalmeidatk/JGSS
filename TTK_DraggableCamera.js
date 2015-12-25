@@ -1,5 +1,5 @@
 //=============================================================================
-// TTK - Draggable Camera (v1.0.0)
+// TTK - Draggable Camera (v1.1.0)
 // by Fogomax
 //=============================================================================
 
@@ -8,35 +8,35 @@
 	* @plugindesc This plugin allows the player to drag and move the camera
 	* <TTK DraggableCamera>
 	* @help
-		===========================================================================
-		● Explanation
-		===========================================================================
-		This plugins allows the player to drag and move the camera, simple.
+	===========================================================================
+	● Explanation
+	===========================================================================
+	This plugins allows the player to drag and move the camera, simple.
 
-		===========================================================================
-		● Use
-		===========================================================================
-		To turn on/off the plugin, user the following plugin command:
-		 - DraggableCamera setEnabled x
-		Here x can be "true" (on) or "false" (off), without the ("). Example:
-		 - DraggableCamera setEnabled true
-		
-		@param Start on
-		@desc If the screen is draggable in the begin of game
-		@default true
-		
-		@param Cancel Player Input
-		@desc Cancel the player move by screen input after a press time
-		@default true
- */
+	===========================================================================
+	● Use
+	===========================================================================
+	To turn on/off the plugin, user the following plugin command:
+	 - DraggableCamera setEnabled x
+	Here x can be "true" (on) or "false" (off), without the ("). Example:
+	 - DraggableCamera setEnabled true
+	
+	@param Start on
+	@desc If the screen is draggable in the begin of game
+	@default true
+	
+	@param Cancel player move
+	@desc Cancel the player move when the camera is moved
+	@default true
+*/
+
+"use strict";
 
 var Imported = Imported || {};
-Imported["TTK_DraggableCamera"] = "1.0.0";
+Imported["TTK_DraggableCamera"] = "1.1.0";
 
 var TTK = TTK || {};
 TTK.DraggableCamera = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTK DraggableCamera>'); })[0].parameters;
@@ -45,8 +45,9 @@ TTK.DraggableCamera = {};
 	// Plugin global variables
 	//
 
-	$.cancelPlayerInput = ($.Params["Cancel Player Input"] === 'true');
-	$.enabled = ($.Params["Start on"] === 'true');
+	$.cancelPlayerMove = ($.Params["Cancel player move"].toLowerCase() === 'true');
+	$.enabled = ($.Params["Start on"].toLowerCase() === 'true');
+	$.denyMove = false;
 
 	//-----------------------------------------------------------------------------
 	// TouchInput
@@ -92,20 +93,22 @@ TTK.DraggableCamera = {};
 		};
 	}
 
-	var _TouchInput_onMouseDown = TouchInput._onMouseDown;
+	var _TouchInput_onTrigger = TouchInput._onTrigger;
 
-	TouchInput._onMouseDown = function(event) {
-		_TouchInput_onMouseDown.call(this, event);
+	TouchInput._onTrigger = function(x, y) {
+		_TouchInput_onTrigger.call(this, x, y);
 		this._lastCameraX = this.x;
 		this._lastCameraY = this.y;
 	};
 
-	var _TouchInput_onMousemove = TouchInput._onMouseMove;
+	var _TouchInput_onMove = TouchInput._onMove;
 
-	TouchInput._onMouseMove = function(event) {
+	TouchInput._onMove = function(x, y) {
+		if ($.cancelPlayerMove)
+			$.denyMove = true;
 		this._lastCameraX = this.x;
 		this._lastCameraY = this.y;
-		_TouchInput_onMousemove.call(this, event);
+		_TouchInput_onMove.call(this, x, y);
 	};
 
 	if (TTK.SwipeMove) {
@@ -117,6 +120,7 @@ TTK.DraggableCamera = {};
 			this._cameraAccY = this._forceY;
 			this._storForceX = this._forceX / 48;
 			this._storForceY = this._forceY / 48;
+			if ($.denyMove) $.denyMove = false;
 		};
 	}
 
@@ -182,12 +186,12 @@ TTK.DraggableCamera = {};
 	var _Game_Player_moveByInput = Game_Player.prototype.moveByInput;
 
 	Game_Player.prototype.moveByInput = function() {
-		if ($.cancelPlayerInput && $.enabled) {
-			if (!this.isMoving() && this.canMove()) {
+		if ($.cancelPlayerMove && $.enabled) {
+			if (!this.isMoving() && this.canMove() && !$.denyMove) {
 				var direction = this.getInputDirection();
 				if (direction > 0) {
 					$gameTemp.clearDestination();
-				} else if ($gameTemp.isDestinationValid() && !TouchInput.isLongPressed()){
+				} else if ($gameTemp.isDestinationValid()) {
 					var x = $gameTemp.destinationX();
 					var y = $gameTemp.destinationY();
 					direction = this.findDirectionTo(x, y);
