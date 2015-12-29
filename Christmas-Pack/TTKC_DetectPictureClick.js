@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Detect Picture Click
+// TTKC - Detect Picture Click (v1.0.1)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -94,13 +94,13 @@
     @default true
 */
 
+"use strict";
+
 var Imported = Imported || {};
-Imported["TTKC_DetectPictureClick"] = "1.0.0";
+Imported["TTKC_DetectPictureClick"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.DetectPictureClick = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC DetectPictureClick>'); })[0].parameters;
@@ -125,8 +125,8 @@ TTK.DetectPictureClick = {};
 		_TouchInput_onMouseDown.call(this, event);
 		for (var i = 0; i < $.pictures.length; i++) {
 			var pictureSprite = SceneManager._scene._spriteset._pictureContainer.children[i];
-			if (event.x >= pictureSprite.x && event.x <= pictureSprite.x + pictureSprite.width
-				&& event.y >= pictureSprite.y && event.y <= pictureSprite.y + pictureSprite.height
+			if (event.x >= pictureSprite.getScreenX() && event.x <= pictureSprite.getScreenX() + pictureSprite.width
+				&& event.y >= pictureSprite.getScreenY() && event.y <= pictureSprite.getScreenY() + pictureSprite.height
 				&& pictureSprite.visible) {
 				$.picturesResults[i + 1] = true;
 			}
@@ -155,6 +155,18 @@ TTK.DetectPictureClick = {};
 		return r;
 	}
 
+  //-----------------------------------------------------------------------------
+  // Sprite_Picture
+  //
+
+  Sprite_Picture.prototype.getScreenX = function() {
+      return this.x - (this.width * this.anchor.x);
+  };
+
+  Sprite_Picture.prototype.getScreenY = function() {
+      return this.y - (this.height * this.anchor.y);
+  };
+
 	//-----------------------------------------------------------------------------
 	// Game_Player
 	//
@@ -173,26 +185,26 @@ TTK.DetectPictureClick = {};
 	var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 
 	Game_Interpreter.prototype.pluginCommand = function(command, args) {
-  		_Game_Interpreter_pluginCommand.call(this, command, args);
-  		if (command == "DetectPictureClick") {
-  			switch(args[0].toLowerCase()) {
-  				case "on":
-  					var id = parseInt(args[1]);
-  					if (!~$.pictures.indexOf(id))
-  						$.pictures.push(id);
-  					break;
+		_Game_Interpreter_pluginCommand.call(this, command, args);
+		if (command == "DetectPictureClick") {
+			switch(args[0].toLowerCase()) {
+				case "on":
+					var id = parseInt(args[1]);
+					if (!~$.pictures.indexOf(id))
+						$.pictures.push(id);
+					break;
 
-  				case "off":
-  					var id = parseInt(args[1]);
-  					if (~$.pictures.indexOf(id))
-  						$.pictures.splice($.pictures.indexOf(parseInt(id)), 1);
-  					break;
-  			}
-  		}
-  	};
+				case "off":
+					var id = parseInt(args[1]);
+					if (~$.pictures.indexOf(id))
+						$.pictures.splice($.pictures.indexOf(parseInt(id)), 1);
+					break;
+			}
+		}
+	};
 
 	//-----------------------------------------------------------------------------
-	// Click function
+	// Click & Press functions
 	//
 
 	$.Click = function(pictureId) {
