@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Simple HUD
+// TTKC - Simple HUD (v1.0.1)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -71,13 +71,13 @@
 	@default 200
 */
 
+"use strict";
+
 var Imported = Imported || {};
-Imported["TTKC_SimpleHUD"] = "1.0.0";
+Imported["TTKC_SimpleHUD"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.SimpleHUD = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC SimpleHUD>'); })[0].parameters;
@@ -102,6 +102,13 @@ TTK.SimpleHUD = {};
 		this.addChild(this._windowSimpleHud);
 	};
 
+	var _Scene_Map_terminate = Scene_Map.prototype.terminate;
+
+	Scene_Map.prototype.terminate = function() {
+	    this._windowSimpleHud.hide();
+		_Scene_Map_terminate.call(this);
+	};
+
 	//-----------------------------------------------------------------------------
 	// Window_Simple_HUD
 	//
@@ -121,7 +128,7 @@ TTK.SimpleHUD = {};
 		this._needDraw = true;
 		this._actor = $gameParty.members()[0];
 		this._lastActor = this._actor;
-	}
+	};
 
 	Window_Simple_HUD_drawBasicInfo = Window_Status.prototype.drawBasicInfo;
 
@@ -147,7 +154,7 @@ TTK.SimpleHUD = {};
 			this._lastStats = [this._actor.name(), this._actor.hp, this._actor.mp, this._actor.level];
 			if (this._needDraw) this._needDraw = false;
 		}
-	}
+	};
 
 	//-----------------------------------------------------------------------------
 	// Plugin command
