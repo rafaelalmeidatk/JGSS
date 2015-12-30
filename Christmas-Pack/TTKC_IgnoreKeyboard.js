@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Ignore Keyboard
+// TTKC - Ignore Keyboard (v1.0.1)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -37,9 +37,9 @@
   * For this plugin also has an effect on others, and not just in engine
   * standards, put it as the last plugin in the list.
 
-    @param Starts on
-    @desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
-    @default true
+	@param Starts on
+	@desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
+	@default true
 */
 
 /*:pt
@@ -70,15 +70,15 @@
   * Para que esse plugin também tenha efeito sobre os outros, e não apenas nos
   * originais da engine, coloque-o como último plugin na lista.
 
-    @param Starts on
-    @desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
-    @default true
+	@param Starts on
+	@desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
+	@default true
 */
 
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_IgnoreKeyboard"] = "1.0.0";
+Imported["TTKC_IgnoreKeyboard"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.IgnoreKeyboard = {};
@@ -103,12 +103,12 @@ TTK.IgnoreKeyboard = {};
 			_Input_onKeyDown.call(this, event);
 	};
 
-  var _Input_onKeyUp = Input._onKeyUp;
+	var _Input_onKeyUp = Input._onKeyUp;
 
-  Input._onKeyUp = function(event) {
-    if (!$.on)
-      _Input_onKeyUp.call(this, event);
-  };
+	Input._onKeyUp = function(event) {
+		if (!$.on)
+			_Input_onKeyUp.call(this, event);
+	};
 
 	//-----------------------------------------------------------------------------
 	// Plugin command
@@ -117,17 +117,17 @@ TTK.IgnoreKeyboard = {};
 	var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 
 	Game_Interpreter.prototype.pluginCommand = function(command, args) {
-  		_Game_Interpreter_pluginCommand.call(this, command, args);
-  		if (command == "IgnoreKeyboard") {
-  			switch(args[0].toLowerCase()) {
-  				case "on":
-  					$.on = true;
-  					break;
+		_Game_Interpreter_pluginCommand.call(this, command, args);
+		if (command == "IgnoreKeyboard") {
+			switch(args[0].toLowerCase()) {
+				case "on":
+					$.on = true;
+					break;
 
-  				case "off":
-  					$.on = false;
-  					break;
-  			}
-  		}
-  	};
+				case "off":
+					$.on = false;
+					break;
+			}
+		}
+	};
 })(TTK.IgnoreKeyboard);
