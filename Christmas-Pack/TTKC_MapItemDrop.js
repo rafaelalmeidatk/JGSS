@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Map Item Drop
+// TTKC - Map Item Drop (v1.0.1)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -137,15 +137,15 @@
     @desc Ao esquecer de especificar um valor obrigatório nos comandos de
     plugin, um erro é disparado (recomendado para desenvolvimento)
     @default true
- */
+*/
+
+"use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_MapItemDrop"] = "1.0.0";
+Imported["TTKC_MapItemDrop"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.MapItemDrop = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC MapItemDrop>'); })[0].parameters;
@@ -216,9 +216,12 @@ TTK.MapItemDrop = {};
 		var p = this;
 		var drops = $.mapDrops.filter(function (d) { return d._tileX == p._realX && d._tileY == p._realY; });
 	    drops.forEach(function(d) {
-	    	$gameParty.gainItem($dataItems[d._id], 1);
-	    	if ($.playSound) SoundManager.playOk();
-	        d.remove();
+	    	if (!d.isPicked()) {
+		    	$gameParty.gainItem($dataItems[d._id], 1);
+		    	if ($.playSound) SoundManager.playOk();
+		    	d.pick();
+		        d.remove();
+	    	}
 	    });
 	}
 
@@ -255,8 +258,17 @@ TTK.MapItemDrop = {};
 		this.setPosition();
 		this._limitFloatY = [this.y - 5, this.y + 5];
 		this._throwY = 0;
+		this._picked = false;
 		this.drawIcon();
 	}
+
+	Drop_Sprite.prototype.pick = function() {
+		this._picked = true;
+	};
+
+	Drop_Sprite.prototype.isPicked = function() {
+		return this._picked;
+	};
 
 	Drop_Sprite.prototype.update = function() {
 		if (this._removed)
