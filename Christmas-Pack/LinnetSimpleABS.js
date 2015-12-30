@@ -1,14 +1,83 @@
 //=============================================================================
-// Linnet Simple ABS (v1.0.0)
+// Linnet Simple ABS (v1.0.1)
 // by Fogomax
-// Licença: Attribution-ShareAlike 4.0 International - Creative Commons
+// License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
-  
- 
+
 /*:
+	* @author Fogomax
+	* @plugindesc A Simple ABS with the player and the enemies working.
+	* @help
+	===========================================================================
+	● Explanation
+	===========================================================================
+	This is the initial version of my ABS, it is a simple step, but
+	It works very well and already has a range of features available.
+
+	===========================================================================
+	● Use
+	===========================================================================
+	The attack button is the S key. It will always use skill 1
+	in the database, and it will work if the enemy is facing
+	the hero.
+	To create an enemy, create an event on the map and enter the
+	Comment (preferable as the first command in the event list):
+
+	"x" being the enemy ID in the database. If the enemy can walk,
+	place the event type as "Approach", so he will walk up to the player.
+	Now that the event is set up, we go to the database and will go
+	to the enemy ID x we specified as the event. There are some notetags to be
+	added in the notes of enemies. They are:
+	* - The enemy is static, it will not walk or see the player.
+	This is for objects such as bushes or punching bags.
+	* - The enemy will look up to x tiles away when a
+	enemy player comes into view, an exclamation balloon appears, and his movement
+	changes to "Zoom". If not specified, the default value is 2.
+	* - The enemy will wait x milliseconds before it can be attacked again.
+	It is recommended a number above 100. Recalling that 1000ms = 1s.
+	If not specified, the default value is 100.
+
+	===========================================================================
+	● Enemy skills
+	===========================================================================
+	Enemies will use the skills that are listed in its "Standards
+	action. "They will follow the condition and ability with the highest rating.
+	If you put two abilities with the same R (rating),
+	the enemy will have a 50% chance of choosing one (he will be taking turns). IT IS
+	important not to put skills that need mana alone, as when the enemy runs out of
+	mana, he will have no skills to use, and the game will give an error.
+	The damage the ability follows the formula specified in the database in the same way
+	the common battle system. If you want the ability more hit
+	once (double attack, for example), increases the number of times the
+	"Repeat" box in the "Invocation" field. By using this, it is advisable to specify
+	how long each will attack using specific notetag for skills.
+	They are:
+	* - The ability will reach up to x tiles, by default this value is 1.
+	When your ability will not have an area larger than this, it is not necessary
+	to put this notetag.
+	* - Time between the continuous attacks if their ability
+	does not have the repeated damage, it is not necessary to use this notetag, and if it
+	repeat, the default value is 200ms.
+
+	===========================================================================
+	● Weapons
+	===========================================================================
+	You can change the cooldown of the hero's attacks through the weapons he uses,
+	i.e., a sword may have a faster strike rate than another.
+	To do this, specify the following notetag in the weapon notes:
+	* - The player will have a cooldown of x ms between each attack.
+	Recalling that 1000ms = 1s. The default value of this note is 100 (thus 100ms)
+	if you do not specify its value.
+
+	===========================================================================
+	● Credits
+	===========================================================================
+	English translation of Help by @KlausAidon
+*/
+
+/*:pt
   * @author Fogomax
   * @plugindesc ABS simples com o jogador e os inimigos funcionando
-  * <Linnet ABS>
   * @help
 	===========================================================================
 	● Explicação
@@ -85,18 +154,17 @@
 	* <Cooldown=x> - O player irá ter um intervalor de x ms entre cada ataque.
 	Lembrando que 1000ms = 1s. O valor padrão dessa nota é 100 (logo, 100ms),
 	para caso você não especifique seu valor.
- */
+*/
+
+"use strict";
 
 var Imported = Imported || {};
-Imported["LinnetABS"] = "1.0.0";
+Imported["LinnetABS"] = "1.0.1";
 
 var Linnet = Linnet || {};
 Linnet.ABS = {};
 
-"use strict";
-
 (function($) {
-	$.Params = $plugins.filter(function(p) { return p.description.contains('<Linnet ABS>'); })[0].parameters;
 
 	//-----------------------------------------------------------------------------
 	// Plugin global variables
@@ -224,7 +292,6 @@ Linnet.ABS = {};
 	}
 
 	Game_Player.prototype.receiveAttack = function(skillId, enemy) {
-		console.log(enemy);
 		var skill = new ABS_Skill(skillId, enemy);
 		skill.execute(this);
 	}
@@ -648,4 +715,5 @@ Linnet.ABS = {};
 	Utils.getAnimationId = function(id) {
 		return (id == -1) ? (1) : (id);
 	}
+
 })(Linnet.ABS);
