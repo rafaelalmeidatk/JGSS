@@ -12,6 +12,38 @@
 
 /*:
   * @author Fogomax
+  * @plugindesc Remove the keyboard functionality in the game, this feature can
+  * be turned on / off
+  * <TTKC IgnoreKeyboard>
+  * @help
+  * ===========================================================================
+  * ● Explanation
+  * ===========================================================================
+  * Remove the functionality of the keyboard in the game. However, this can be
+  * enabled or disabled in the course of it.
+  *
+  * ===========================================================================
+  * ● How to Use
+  * ===========================================================================
+  * By default the keyboard comes off (in the settings), but if you want to
+  * change it during the game, make the following calls in the Plugin Command:
+  *
+  * * IgnoreKeyboard On - activate the plugin, the keyboard will be ignored
+  * * IgnoreKeyboard Off - disable the plugin, the keyboard will work
+  *
+  * ===========================================================================
+  * ● Important note
+  * ===========================================================================
+  * For this plugin also has an effect on others, and not just in engine
+  * standards, put it as the last plugin in the list.
+
+    @param Starts on
+    @desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
+    @default true
+*/
+
+/*:pt
+  * @author Fogomax
   * @plugindesc Remove a funcionalidade do teclado no jogo, tal funcionalidade
   * pode ser ligada/desligada
   * <TTKC IgnoreKeyboard>
@@ -38,18 +70,18 @@
   * Para que esse plugin também tenha efeito sobre os outros, e não apenas nos
   * originais da engine, coloque-o como último plugin na lista.
 
-    @param Inicio ligado
+    @param Starts on
     @desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
     @default true
- */
+*/
+
+"use strict";
 
 var Imported = Imported || {};
 Imported["TTKC_IgnoreKeyboard"] = "1.0.0";
 
 var TTK = TTK || {};
 TTK.IgnoreKeyboard = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC IgnoreKeyboard>'); })[0].parameters;
@@ -58,19 +90,25 @@ TTK.IgnoreKeyboard = {};
 	// Plugin global variables
 	//
 
-	$.on = ($.Params['Inicio ligado'] === 'true');
+	$.on = ($.Params['Starts on'] === 'true');
 
 	//-----------------------------------------------------------------------------
 	// Input
 	//
 
-	var _TouchInput_onKeyDown = TouchInput._onKeyDown;
+	var _TouchInput_onKeyDown = Input._onKeyDown;
 
 	Input._onKeyDown = function(event) {
 		if (!$.on)
-			_TouchInput_onKeyDown.call(this, event);
+			_Input_onKeyDown.call(this, event);
 	};
 
+  var _Input_onKeyUp = Input._onKeyUp;
+
+  Input._onKeyUp = function(event) {
+    if (!$.on)
+      _Input_onKeyUp.call(this, event);
+  };
 
 	//-----------------------------------------------------------------------------
 	// Plugin command
