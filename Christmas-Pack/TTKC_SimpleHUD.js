@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Simple HUD (v1.0.1)
+// TTKC - Simple HUD (v1.0.2)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -74,7 +74,7 @@
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_SimpleHUD"] = "1.0.1";
+Imported["TTKC_SimpleHUD"] = "1.0.2";
 
 var TTK = TTK || {};
 TTK.SimpleHUD = {};
@@ -130,7 +130,7 @@ TTK.SimpleHUD = {};
 		this._lastActor = this._actor;
 	};
 
-	Window_Simple_HUD_drawBasicInfo = Window_Status.prototype.drawBasicInfo;
+	var Window_Simple_HUD_drawBasicInfo = Window_Status.prototype.drawBasicInfo;
 
 	Window_Simple_HUD.prototype.update = function() {
 		if ($.on && !this.visible) this.show();
