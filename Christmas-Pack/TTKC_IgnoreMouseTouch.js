@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Ignore Mouse & Touch
+// TTKC - Ignore Mouse & Touch (v1.0.1)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -39,7 +39,7 @@
   * For this plugin also has an effect on others, and not just in engine
   * standards, put it as the last plugin in the list.
 
-    @param Start on
+    @param Starts on
     @desc The mouse and the touch will start disabled? Yes: true | No: false
     @default true
  */
@@ -72,18 +72,18 @@
   * Para que esse plugin também tenha efeito sobre os outros, e não apenas nos
   * originais da engine, coloque-o como último plugin na lista.
 
-    @param Inicio ligado
+    @param Starts on
     @desc O mouse e o touch iniciarão desligados? Sim: true | Não: false
     @default true
- */
+*/
+
+"use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_IgnoreMouseTouch"] = "1.0.0";
+Imported["TTKC_IgnoreMouseTouch"] = "1.0.1";
 
 var TTK = TTK || {};
 TTK.IgnoreMouseTouch = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC IgnoreMouseTouch>'); })[0].parameters;
@@ -92,7 +92,7 @@ TTK.IgnoreMouseTouch = {};
 	// Plugin global variables
 	//
 
-	$.on = ($.Params['Inicio ligado'] === 'true');
+	$.on = ($.Params['Starts on'] === 'true');
 
 	//-----------------------------------------------------------------------------
 	// TouchInput
