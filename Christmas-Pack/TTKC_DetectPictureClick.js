@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Detect Picture Click (v1.0.1)
+// TTKC - Detect Picture Click (v1.0.2)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -97,7 +97,7 @@
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_DetectPictureClick"] = "1.0.1";
+Imported["TTKC_DetectPictureClick"] = "1.0.2";
 
 var TTK = TTK || {};
 TTK.DetectPictureClick = {};
@@ -123,37 +123,41 @@ TTK.DetectPictureClick = {};
 
 	TouchInput._onMouseDown = function(event) {
 		_TouchInput_onMouseDown.call(this, event);
-		for (var i = 0; i < $.pictures.length; i++) {
-			var pictureSprite = SceneManager._scene._spriteset._pictureContainer.children[i];
-			if (event.x >= pictureSprite.getScreenX() && event.x <= pictureSprite.getScreenX() + pictureSprite.width
-				&& event.y >= pictureSprite.getScreenY() && event.y <= pictureSprite.getScreenY() + pictureSprite.height
-				&& pictureSprite.visible) {
-				$.picturesResults[i + 1] = true;
-			}
-		}
+    if (SceneManager._scene instanceof Scene_Map) {
+      for (var i = 0; i < $.pictures.length; i++) {
+        var pictureSprite = SceneManager._scene._spriteset._pictureContainer.children[$.pictures[i] - 1];
+        if (event.x >= pictureSprite.getScreenX() && event.x <= pictureSprite.getScreenX() + pictureSprite.width
+          && event.y >= pictureSprite.getScreenY() && event.y <= pictureSprite.getScreenY() + pictureSprite.height
+          && pictureSprite.visible) {
+          $.picturesResults[$.pictures[i]] = true;
+        }
+      }
+    }
 	};
 
 	var _TouchInput_onMouseUp = TouchInput._onMouseUp;
 
 	TouchInput._onMouseUp = function(event) {
 		_TouchInput_onMouseUp.call(this, event);
-		for (var i = 0; i < $.pictures.length; i++) {
-			$.picturesResults[i + 1] = false;
-		}
-		if (!$.playerCanMove) $.playerCanMove = true;
-	}
+    if (SceneManager._scene instanceof Scene_Map) {
+  		for (var i = 0; i < $.pictures.length; i++) {
+  			$.picturesResults[$.pictures[i]] = false;
+  		}
+  		if (!$.playerCanMove) $.playerCanMove = true;
+    }
+	};
 
 	TouchInput.isPictureClicked = function(id) {
 		var r = $.picturesResults[id] && (this._pressedTime === 0 || this._pressedTime === 1);
 		if (r && $.clickStopPlayerMove) $.playerCanMove = false;
 		return r;
-	}
+	};
 
 	TouchInput.isPicturePressed = function(id) {
 		var r = $.picturesResults[id];
 		if (r && $.pressStopPlayerMove) $.playerCanMove = false;
 		return r;
-	}
+	};
 
   //-----------------------------------------------------------------------------
   // Sprite_Picture
@@ -213,7 +217,7 @@ TTK.DetectPictureClick = {};
 
 	$.Press = function(pictureId) {
 		return TouchInput.isPicturePressed(pictureId);
-	}
+	};
 })(TTK.DetectPictureClick);
 
 //=============================================================================
