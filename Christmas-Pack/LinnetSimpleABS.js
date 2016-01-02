@@ -1,5 +1,5 @@
 //=============================================================================
-// Linnet Simple ABS (v1.0.1)
+// Linnet Simple ABS (v1.0.2)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -23,17 +23,22 @@
 	To create an enemy, create an event on the map and enter the
 	Comment (preferable as the first command in the event list):
 
+	<NimpleEnemy=x>
+
 	"x" being the enemy ID in the database. If the enemy can walk,
 	place the event type as "Approach", so he will walk up to the player.
 	Now that the event is set up, we go to the database and will go
 	to the enemy ID x we specified as the event. There are some notetags to be
 	added in the notes of enemies. They are:
-	* - The enemy is static, it will not walk or see the player.
+
+	* <StaticEnemy> - The enemy is static, it will not walk or see the player.
 	This is for objects such as bushes or punching bags.
-	* - The enemy will look up to x tiles away when a
+
+	* <ViewRange=x> - The enemy will look up to x tiles away when a
 	enemy player comes into view, an exclamation balloon appears, and his movement
 	changes to "Zoom". If not specified, the default value is 2.
-	* - The enemy will wait x milliseconds before it can be attacked again.
+
+	* <Cooldown=x> - The enemy will wait x milliseconds before it can be attacked again.
 	It is recommended a number above 100. Recalling that 1000ms = 1s.
 	If not specified, the default value is 100.
 
@@ -52,10 +57,11 @@
 	"Repeat" box in the "Invocation" field. By using this, it is advisable to specify
 	how long each will attack using specific notetag for skills.
 	They are:
-	* - The ability will reach up to x tiles, by default this value is 1.
+
+	* <Range=x> - The ability will reach up to x tiles, by default this value is 1.
 	When your ability will not have an area larger than this, it is not necessary
 	to put this notetag.
-	* - Time between the continuous attacks if their ability
+	* <RepeatInterval=x> - Time between the continuous attacks if their ability
 	does not have the repeated damage, it is not necessary to use this notetag, and if it
 	repeat, the default value is 200ms.
 
@@ -65,7 +71,7 @@
 	You can change the cooldown of the hero's attacks through the weapons he uses,
 	i.e., a sword may have a faster strike rate than another.
 	To do this, specify the following notetag in the weapon notes:
-	* - The player will have a cooldown of x ms between each attack.
+	* <Cooldown=x> - The player will have a cooldown of x ms between each attack.
 	Recalling that 1000ms = 1s. The default value of this note is 100 (thus 100ms)
 	if you do not specify its value.
 
@@ -159,7 +165,7 @@
 "use strict";
 
 var Imported = Imported || {};
-Imported["LinnetABS"] = "1.0.1";
+Imported["LinnetABS"] = "1.0.2";
 
 var Linnet = Linnet || {};
 Linnet.ABS = {};
@@ -177,17 +183,11 @@ Linnet.ABS = {};
 	$.damageSprites = [];
 
 	// Declare attack key
-	Input.keyMapper[83] = "S"
+	Input.keyMapper[83] = "S";
 
 	//-----------------------------------------------------------------------------
 	// Game_Map
 	//
-
-	var _Game_Map_setup = Game_Map.prototype.setup;
-
-	Game_Map.prototype.setup = function(mapId) {
-		_Game_Map_setup.call(this, mapId);
-	};
 
 	var _Game_Map_update = Game_Map.prototype.update;
 
@@ -206,7 +206,24 @@ Linnet.ABS = {};
 
 	Game_CharacterBase.prototype.initMembers = function() {
 		_Game_CharacterBase_initMembers.call(this);
-		this._damageSpriteController = new Damage_Sprite_Controller(this);
+		this._damageSpriteController = new Damage_Sprite_Controller();
+	};
+
+	var _Game_CharacterBase_update = Game_CharacterBase.prototype.update;
+
+	Game_CharacterBase.prototype.update = function() {
+		_Game_CharacterBase_update.call(this);
+		this._damageSpriteController.update();
+	};
+
+	var _Scene_Map_stop = Scene_Map.prototype.stop;
+
+	Scene_Map.prototype.stop = function() {
+		$gamePlayer._damageSpriteController.removeAll();
+	    $gameMap.events().forEach(function(event) {
+	        event._damageSpriteController.removeAll();
+	    });
+		_Scene_Map_stop.call(this);
 	};
 
 	//-----------------------------------------------------------------------------
@@ -289,24 +306,24 @@ Linnet.ABS = {};
 
 			this._cooldown = this.getCooldown();
 		}
-	}
+	};
 
 	Game_Player.prototype.receiveAttack = function(skillId, enemy) {
 		var skill = new ABS_Skill(skillId, enemy);
 		skill.execute(this);
-	}
+	};
 
 	Game_Player.prototype.receiveDamage = function(skill, damage) {
 		this.requestAnimation((Utils.getAnimationId(skill.animationId)));
 		this.hero()._hp -= damage;
-		this._damageSpriteController.addDamageSprite(damage);
+		this._damageSpriteController.addDamageSprite(damage, this);
 		if (this.hero()._hp <= 0)
 			SceneManager.goto(Scene_Gameover);
-	}
+	};
 
 	Game_Player.prototype.hero = function() {
 		return $gameActors.actor(1);
-	}
+	};
 
 	Game_Player.prototype.getCooldown = function() {
 		var note = this.hero().weapons()[0].note;
@@ -314,7 +331,7 @@ Linnet.ABS = {};
 			return parseInt(note.match(/<Cooldown=(\d+)>/)[1]);
 		else
 			return 100;
-	}
+	};
 
 	//-----------------------------------------------------------------------------
 	// Spriteset_Map
@@ -324,7 +341,6 @@ Linnet.ABS = {};
 
 	Spriteset_Map.prototype.createLowerLayer = function() {
 		_Spriteset_Map_createLowerLayer.call(this);
-		this.createABSLayer();
 	};
 
 	var _Spriteset_Map_update = Spriteset_Map.prototype.update;
@@ -333,12 +349,9 @@ Linnet.ABS = {};
 	    _Spriteset_Map_update.call(this);
 	};
 
-	Spriteset_Map.prototype.createABSLayer = function() {
-	}
-
 	Spriteset_Map.prototype.addDamageSprite = function(instance) {
 		this._baseSprite.addChild(instance);
-	}
+	};
 
 	//-----------------------------------------------------------------------------
 	// Game_BattlerBase
@@ -445,10 +458,10 @@ Linnet.ABS = {};
 	}
 
 	ABS_Enemy.prototype.updateAttack = function() {
-		var ex = this._event._realX;
-		var ey = this._event._realY;
-		var px = $gamePlayer._realX;
-		var py = $gamePlayer._realY;
+		var ex = this._event.x;
+		var ey = this._event.y;
+		var px = $gamePlayer.x;
+		var py = $gamePlayer.y;
 		var rg = this.currentAction().item().range;
 
 		switch (this._event.direction()) {
@@ -514,12 +527,13 @@ Linnet.ABS = {};
 			return;
 
 		this._hp -= damage;
-		this._event._damageSpriteController.addDamageSprite(damage);
+		this._event._damageSpriteController.addDamageSprite(damage, this._event);
 
 		this._event.turnTowardCharacter($gamePlayer);
 		this._event.requestAnimation(Utils.getAnimationId(skill.animationId));
 
 		if (this._hp <= 0) {
+			this.giveDrops();
 			this.giveExpAndGold();
 			this.processDie();
 		}
@@ -531,6 +545,13 @@ Linnet.ABS = {};
 		this._event.setMoveFrequency(5);
 		this._sawPlayer = true;
 	}
+
+	ABS_Enemy.prototype.giveDrops = function() {
+		var items = this.makeDropItems();
+		items.forEach(function(item) {
+			$gameParty.gainItem(item, 1);
+		});
+	};
 
 	ABS_Enemy.prototype.giveExpAndGold = function() {
 		$gamePlayer.hero().gainExp(this.exp());
@@ -571,12 +592,12 @@ Linnet.ABS = {};
 
 	function ABS_Skill() {
 		this.initialize.apply(this, arguments);
-	}
+	};
 
 	ABS_Skill.prototype.initialize = function(skillId, caster) {
 		this._skill = $dataSkills[skillId];
 		this._caster = caster;
-	}
+	};
 
 	ABS_Skill.prototype.calculateFormula = function(target) {
 	    try {
@@ -588,7 +609,7 @@ Linnet.ABS = {};
 	    } catch (e) {
 	        return 0;
 	    }
-	}
+	};
 
 	ABS_Skill.prototype.execute = function(target) {
 		var targetObject = target;
@@ -607,14 +628,14 @@ Linnet.ABS = {};
 				}, this.repeatInterval());
 			}
 		}
-	}
+	};
 
 	ABS_Skill.prototype.repeatInterval = function() {
 		if (/<RepeatInterval=/.test(this._skill.note))
 			return parseInt(this._skill.note.match(/<RepeatInterval=(\d+)>/)[1]);
 		else
 			return 200;
-	}
+	};
 
 	//-----------------------------------------------------------------------------
 	// Damage_Sprite_Controller
@@ -622,33 +643,41 @@ Linnet.ABS = {};
 
 	function Damage_Sprite_Controller() {
 		this.initialize.apply(this, arguments);
-	}
+	};
 
-	Damage_Sprite_Controller.prototype.initialize = function(target) {
-		this._target = target;
+	Damage_Sprite_Controller.prototype.initialize = function() {
 		this._damageSprites = [];
-	}
+	};
 
-	Damage_Sprite_Controller.prototype.addDamageSprite = function(value) {
+	Damage_Sprite_Controller.prototype.addDamageSprite = function(value, target) {
 		if (this._damageSprites.length > 0 && !this._damageSprites[this._damageSprites.length-1].canAdd()) {
 			this._damageSprites.forEach(function(damageSprite) {
 				damageSprite.forceUp();
 			});
 		}
-		var newDamageSprite = new Damage_Sprite(value, this);
+		var newDamageSprite = new Damage_Sprite(value, target.screenX(), target.screenY());
 		this._damageSprites.push(newDamageSprite);
 		SceneManager._scene._spriteset.addDamageSprite(newDamageSprite);
-
-	}
+	};
 
 	Damage_Sprite_Controller.prototype.removeDamageSprite = function(damageSprite) {
 		this._damageSprites.splice(this._damageSprites.indexOf(damageSprite), 1);
 		SceneManager._scene._spriteset._baseSprite.removeChild(damageSprite);
-	}
+	};
 
-	Damage_Sprite_Controller.prototype.target = function() {
-		return this._target;
-	}
+	Damage_Sprite_Controller.prototype.removeAll = function() {
+		for (var i = this._damageSprites.length - 1; i >= 0; i--) {
+			this.removeDamageSprite(this._damageSprites[i]);
+		};
+	};
+
+	Damage_Sprite_Controller.prototype.update = function() {
+		for (var i = 0; i < this._damageSprites.length; i++) {
+			if (this._damageSprites[i].needRemove()) {
+				this.removeDamageSprite(this._damageSprites[i]);
+			}
+		}
+	};
 
 	//-----------------------------------------------------------------------------
 	// Damage_Sprite
@@ -656,26 +685,26 @@ Linnet.ABS = {};
 
 	function Damage_Sprite() {
 		this.initialize.apply(this, arguments);
-	}
+	};
 
 	Damage_Sprite.prototype = Object.create(Sprite_Base.prototype);
 	Damage_Sprite.prototype.constructor = Damage_Sprite;
 
-	Damage_Sprite.prototype.initialize = function(value, controller) {
+	Damage_Sprite.prototype.initialize = function(value, screenX, screenY) {
 		Sprite_Base.prototype.initialize.call(this);
-		this._controller = controller;
 		this._value = value + "";
 		this.bitmap = new Bitmap(150, 48);
-		this.x = this._controller.target().screenX() - 75;
-		this.y = this._controller.target().screenY() - 48;
+		this.x = screenX - 75;
+		this.y = screenY - 48;
 		this._count = 40;
 		this._oldY = this.y;
 		this._canAdd = false;
-	}
+		this._needRemove = false;
+		this.bitmap.drawText(this._value, 0, 0, 150, this.bitmap.fontSize, "center");
+	};
 
 	Damage_Sprite.prototype.update = function() {
-		this.bitmap.clear();
-		this.bitmap.drawText(this._value, 0, 0, 150, this.bitmap.fontSize, "center");
+		if (this._needRemove) return;
 		this.y--;
 		this._canAdd = (this._oldY - this.y > this.bitmap.fontSize - 11);
 		if (this._count > 0)
@@ -684,18 +713,22 @@ Linnet.ABS = {};
 			if (this.opacity > 0) {
 				this.opacity -= 5;
 			} else {
-				this._controller.removeDamageSprite(this);
+				this._needRemove = true;
 			}
 		}
-	}
+	};
 
 	Damage_Sprite.prototype.canAdd = function() {
 		return this._canAdd;
-	}
+	};
 
 	Damage_Sprite.prototype.forceUp = function() {
 		this.y -= this.bitmap.fontSize - 11;
-	}
+	};
+
+	Damage_Sprite.prototype.needRemove = function() {
+		return this._needRemove;
+	};
 
 	//-----------------------------------------------------------------------------
 	// Utils
@@ -703,17 +736,17 @@ Linnet.ABS = {};
 
 	function Utils() {
     	throw new Error('This is a static class');
-	}
+	};
 
 	Utils.regex = function(test, regex, string, defaultValue) {
 		if (test.test(string))
 			return string.match(regex)[1];
 		else
 			return defaultValue;
-	}
+	};
 
 	Utils.getAnimationId = function(id) {
 		return (id == -1) ? (1) : (id);
-	}
+	};
 
 })(Linnet.ABS);
