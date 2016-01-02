@@ -171,7 +171,6 @@ var Linnet = Linnet || {};
 Linnet.ABS = {};
 
 (function($) {
-
 	//-----------------------------------------------------------------------------
 	// Plugin global variables
 	//
@@ -216,14 +215,18 @@ Linnet.ABS = {};
 		this._damageSpriteController.update();
 	};
 
+	//-----------------------------------------------------------------------------
+	// Scene_Map
+	//
+
 	var _Scene_Map_stop = Scene_Map.prototype.stop;
 
 	Scene_Map.prototype.stop = function() {
+		_Scene_Map_stop.call(this);
 		$gamePlayer._damageSpriteController.removeAll();
 	    $gameMap.events().forEach(function(event) {
 	        event._damageSpriteController.removeAll();
 	    });
-		_Scene_Map_stop.call(this);
 	};
 
 	//-----------------------------------------------------------------------------
@@ -380,7 +383,7 @@ Linnet.ABS = {};
 
 	function ABS_Enemy() {
 		this.initialize.apply(this, arguments);
-	}
+	};
 
 	ABS_Enemy.prototype = Object.create(Game_Enemy.prototype);
 	ABS_Enemy.prototype.constructor = ABS_Enemy;
@@ -395,7 +398,7 @@ Linnet.ABS = {};
 		this._viewRange = this.viewRange();
 		this._cooldown = 0;
 		this.makeActions();
-	}
+	};
 
 	ABS_Enemy.prototype.update = function() {
 		if (this._dying)
@@ -414,11 +417,11 @@ Linnet.ABS = {};
 
 		if (this._sawPlayer && this._cooldown <= 0)
 			this.updateAttack();
-	}
+	};
 
 	ABS_Enemy.prototype.updateSkill = function() {
 		this.makeActions();
-	}
+	};
 
 	ABS_Enemy.prototype.updateView = function() {
 		var ex = this._event.x;
@@ -495,7 +498,7 @@ Linnet.ABS = {};
 		}
 
 		this._cooldown = this.getCooldown();
-	}
+	};
 
 	ABS_Enemy.prototype.updateDie = function() {
 		if (this._event.opacity() > 0) {
@@ -512,7 +515,7 @@ Linnet.ABS = {};
 		var skill = this.currentAction().item();
 		$gamePlayer.receiveAttack(skill.id, this);
 		this._cooldown = this.getCooldown();
-	}
+	};
 
 	ABS_Enemy.prototype.receiveAttack = function(skillId) {
 		if (!this._sawPlayer && !this.staticEnemy())
@@ -520,7 +523,7 @@ Linnet.ABS = {};
 
 		var skill = new ABS_Skill(skillId, $gamePlayer.hero());
 		skill.execute(this);
-	}
+	};
 
 	ABS_Enemy.prototype.receiveDamage = function(skill, damage) {
 		if (this._died || this._dying) 
@@ -544,7 +547,7 @@ Linnet.ABS = {};
 		this._event._moveType = 2;
 		this._event.setMoveFrequency(5);
 		this._sawPlayer = true;
-	}
+	};
 
 	ABS_Enemy.prototype.giveDrops = function() {
 		var items = this.makeDropItems();
@@ -560,23 +563,23 @@ Linnet.ABS = {};
 
 	ABS_Enemy.prototype.isDied = function() {
 		return this._died;
-	}
+	};
 
 	ABS_Enemy.prototype.processDie = function() {
 		this._dying = true;
 		this._event._moveType = 0;
-	}
+	};
 
 	ABS_Enemy.prototype.staticEnemy = function() {
 		return (this.enemy().note.indexOf("<StaticEnemy>") >= 0);
-	}
+	};
 
 	ABS_Enemy.prototype.viewRange = function() {
 		if (/<ViewRange=/.test(this.enemy().note))
 			return parseInt(this.enemy().note.match(/<ViewRange=(\d+)>/)[1]);
 		else
 			return 2;
-	}
+	};
 
 	ABS_Enemy.prototype.getCooldown = function() {
 		var note = this.enemy().note;
@@ -584,7 +587,7 @@ Linnet.ABS = {};
 			return parseInt(note.match(/<Cooldown=(\d+)>/)[1]);
 		else
 			return 100;
-	}
+	};
 
 	//-----------------------------------------------------------------------------
 	// ABS_Skill
@@ -748,5 +751,4 @@ Linnet.ABS = {};
 	Utils.getAnimationId = function(id) {
 		return (id == -1) ? (1) : (id);
 	};
-
 })(Linnet.ABS);
