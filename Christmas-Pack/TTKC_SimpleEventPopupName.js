@@ -81,13 +81,13 @@
     @default 10
  */
 
+"use strict";
+
 var Imported = Imported || {};
 Imported["TTKC_SimpleEventPopupName"] = "1.0.2";
 
 var TTK = TTK || {};
 TTK.SimpleEventPopupName = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC SimpleEventPopupName>'); })[0].parameters;
