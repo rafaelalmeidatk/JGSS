@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Simple Event Popup Name (v1.0.1)
+// TTKC - Simple Event Popup Name (v1.0.2)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -82,7 +82,7 @@
  */
 
 var Imported = Imported || {};
-Imported["TTKC_SimpleEventPopupName"] = "1.0.1";
+Imported["TTKC_SimpleEventPopupName"] = "1.0.2";
 
 var TTK = TTK || {};
 TTK.SimpleEventPopupName = {};
@@ -98,6 +98,7 @@ TTK.SimpleEventPopupName = {};
 
 	$.fontSize = parseInt($.Params['Font size']);
 	$.defaultOffset = parseInt($.Params['Offset Y']);
+	$.popupNames = [];
 
 	//-----------------------------------------------------------------------------
 	// Scene_Map
@@ -107,9 +108,8 @@ TTK.SimpleEventPopupName = {};
 
 	Scene_Map.prototype.onMapLoaded = function() {
 		_Scene_Map_onMapLoaded.call(this);
-	    $gameMap.events().forEach(function(event) {
-	    	if (event._popupName)
-	        	this._spriteset.addEventPopupName(event._popupName);
+	    $.popupNames.forEach(function(popupName) {
+	        this._spriteset.addEventPopupName(popupName);
 	    }, this);
 	};
 
@@ -143,17 +143,15 @@ TTK.SimpleEventPopupName = {};
 			if (offset == null)
 				offset = $.defaultOffset;
 
-			if (name != "" && !this._popupName) {
+			if (name != "" && !$.popupNames[this.eventId()]) {
 				var popupName = new EventPopupName(name, this, floatPopup, offset);
-				if (SceneManager._scene._mapLoaded)
-					SceneManager._scene._spriteset.addEventPopupName(popupName)
-				this._popupName = popupName;
-			} else if (name != "" && this._popupName) {
-				this._popupName.renovate(name, floatPopup, offset);
-			} else if (this._popupName) {
-				this._popupName.remove();
+				$.popupNames[this.eventId()] = popupName
+			} else if (name != "" && $.popupNames[this.eventId()]) {
+				$.popupNames[this.eventId()].renovate(name, floatPopup, offset);
+			} else if ($.popupNames[this.eventId()]) {
+				$.popupNames[this.eventId()].remove();
+				$.popupNames[this.eventId()] = null;
 			}
-
 		}
 	};
 
