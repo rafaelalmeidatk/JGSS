@@ -1,5 +1,5 @@
 //=============================================================================
-// Linnet Simple ABS (v1.0.2)
+// Linnet Simple ABS (v1.0.3)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -165,7 +165,7 @@
 "use strict";
 
 var Imported = Imported || {};
-Imported["LinnetABS"] = "1.0.2";
+Imported["LinnetABS"] = "1.0.3";
 
 var Linnet = Linnet || {};
 Linnet.ABS = {};
@@ -237,7 +237,7 @@ Linnet.ABS = {};
 
 	Game_Event.prototype.setupPage = function() {
 		_Game_Event_setupPage.call(this);
-		if (!this._erased) {
+		if (!this._erased && this.page()) {
 			for (var i = 0; i < this.page().list.length; i++) {
 				if (this.page().list[i].code == "108" || this.page().list[i].code == "408") {
 					if (/<NimpleEnemy=/.test(this.page().list[i].parameters[0])) {
