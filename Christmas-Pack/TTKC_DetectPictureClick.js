@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKC - Detect Picture Click (v1.0.2)
+// TTKC - Detect Picture Click (v1.0.3)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -43,13 +43,13 @@
   * For the Click and Press commands works, the detection of the picture need
   * be activated previously. Otherwise the conditions will never be true.
 
-    @param Click stop movement
-    @desc By clicking a detectable image, the player will not walk. Yes: true | No: false
-    @default true
+	@param Click stop movement
+	@desc By clicking a detectable image, the player will not walk. Yes: true | No: false
+	@default true
 
-    @param Press stop movement
-    @desc By pressing a detectable image, the player will not walk. Yes: true | No: false
-    @default true
+	@param Press stop movement
+	@desc By pressing a detectable image, the player will not walk. Yes: true | No: false
+	@default true
 */
 
 /*:pt
@@ -85,79 +85,81 @@
   * Para que os comandos Click e Press funcionem, a verificação do ID deve ser
   * ativada previamente. Caso contrário, a condição nunca será verdadeira.
 
-    @param Click stop movement
-    @desc Ao clicar em uma imagem detectável, o jogador não andará. Sim: true | Não: false
-    @default true
+	@param Click stop movement
+	@desc Ao clicar em uma imagem detectável, o jogador não andará. Sim: true | Não: false
+	@default true
 
-    @param Press stop movement
-    @desc Ao pressionar uma imagem detectável, o jogador não andará. Sim: true | Não: false
-    @default true
+	@param Press stop movement
+	@desc Ao pressionar uma imagem detectável, o jogador não andará. Sim: true | Não: false
+	@default true
 */
 
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_DetectPictureClick"] = "1.0.2";
+Imported["TTKC_DetectPictureClick"] = "1.0.3";
 
 var TTK = TTK || {};
 TTK.DetectPictureClick = {};
 
 (function($) {
-	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC DetectPictureClick>'); })[0].parameters;
+  $.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC DetectPictureClick>'); })[0].parameters;
 
-	//-----------------------------------------------------------------------------
-	// Plugin global variables
-	//
+  //-----------------------------------------------------------------------------
+  // Plugin global variables
+  //
 
-	$.clickStopPlayerMove = ($.Params['Click stop movement'] === 'true');
-	$.pressStopPlayerMove = ($.Params['Press stop movement'] === 'true');
-	$.pictures = [];
-	$.picturesResults = [];
-	$.playerCanMove = true;
+  $.clickStopPlayerMove = ($.Params['Click stop movement'] === 'true');
+  $.pressStopPlayerMove = ($.Params['Press stop movement'] === 'true');
+  $.pictures = [];
+  $.picturesResults = [];
+  $.playerCanMove = true;
 
-	//-----------------------------------------------------------------------------
-	// TouchInput
-	//
+  //-----------------------------------------------------------------------------
+  // TouchInput
+  //
 
-	var _TouchInput_onMouseDown = TouchInput._onMouseDown;
+  var _TouchInput_onMouseDown = TouchInput._onMouseDown;
 
-	TouchInput._onMouseDown = function(event) {
-		_TouchInput_onMouseDown.call(this, event);
+  TouchInput._onMouseDown = function(event) {
+    _TouchInput_onMouseDown.call(this, event);
     if (SceneManager._scene instanceof Scene_Map) {
       for (var i = 0; i < $.pictures.length; i++) {
         var pictureSprite = SceneManager._scene._spriteset._pictureContainer.children[$.pictures[i] - 1];
-        if (event.x >= pictureSprite.getScreenX() && event.x <= pictureSprite.getScreenX() + pictureSprite.width
-          && event.y >= pictureSprite.getScreenY() && event.y <= pictureSprite.getScreenY() + pictureSprite.height
+        var x = Graphics.pageToCanvasX(event.pageX);
+        var y = Graphics.pageToCanvasY(event.pageY);
+        if (x >= pictureSprite.getScreenX() && x <= pictureSprite.getScreenX() + pictureSprite.width
+          && y >= pictureSprite.getScreenY() && y <= pictureSprite.getScreenY() + pictureSprite.height
           && pictureSprite.visible) {
           $.picturesResults[$.pictures[i]] = true;
         }
       }
     }
-	};
+  };
 
-	var _TouchInput_onMouseUp = TouchInput._onMouseUp;
+  var _TouchInput_onMouseUp = TouchInput._onMouseUp;
 
-	TouchInput._onMouseUp = function(event) {
-		_TouchInput_onMouseUp.call(this, event);
+  TouchInput._onMouseUp = function(event) {
+    _TouchInput_onMouseUp.call(this, event);
     if (SceneManager._scene instanceof Scene_Map) {
-  		for (var i = 0; i < $.pictures.length; i++) {
-  			$.picturesResults[$.pictures[i]] = false;
-  		}
-  		if (!$.playerCanMove) $.playerCanMove = true;
+      for (var i = 0; i < $.pictures.length; i++) {
+        $.picturesResults[$.pictures[i]] = false;
+      }
+      if (!$.playerCanMove) $.playerCanMove = true;
     }
-	};
+  };
 
-	TouchInput.isPictureClicked = function(id) {
-		var r = $.picturesResults[id] && (this._pressedTime === 0 || this._pressedTime === 1);
-		if (r && $.clickStopPlayerMove) $.playerCanMove = false;
-		return r;
-	};
+  TouchInput.isPictureClicked = function(id) {
+    var r = $.picturesResults[id] && (this._pressedTime === 0 || this._pressedTime === 1);
+    if (r && $.clickStopPlayerMove) $.playerCanMove = false;
+    return r;
+  };
 
-	TouchInput.isPicturePressed = function(id) {
-		var r = $.picturesResults[id];
-		if (r && $.pressStopPlayerMove) $.playerCanMove = false;
-		return r;
-	};
+  TouchInput.isPicturePressed = function(id) {
+    var r = $.picturesResults[id];
+    if (r && $.pressStopPlayerMove) $.playerCanMove = false;
+    return r;
+  };
 
   //-----------------------------------------------------------------------------
   // Sprite_Picture
@@ -171,53 +173,53 @@ TTK.DetectPictureClick = {};
       return this.y - (this.height * this.anchor.y);
   };
 
-	//-----------------------------------------------------------------------------
-	// Game_Player
-	//
+  //-----------------------------------------------------------------------------
+  // Game_Player
+  //
 
-	var _Game_Player_canMove = Game_Player.prototype.canMove;
+  var _Game_Player_canMove = Game_Player.prototype.canMove;
 
-	Game_Player.prototype.canMove = function() {
-		if (!$.playerCanMove) return false;
-		return _Game_Player_canMove.call(this);
-	};
+  Game_Player.prototype.canMove = function() {
+    if (!$.playerCanMove) return false;
+    return _Game_Player_canMove.call(this);
+  };
 
-	//-----------------------------------------------------------------------------
-	// Plugin command
-	//
+  //-----------------------------------------------------------------------------
+  // Plugin command
+  //
 
-	var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+  var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 
-	Game_Interpreter.prototype.pluginCommand = function(command, args) {
-		_Game_Interpreter_pluginCommand.call(this, command, args);
-		if (command == "DetectPictureClick") {
-			switch(args[0].toLowerCase()) {
-				case "on":
-					var id = parseInt(args[1]);
-					if (!~$.pictures.indexOf(id))
-						$.pictures.push(id);
-					break;
+  Game_Interpreter.prototype.pluginCommand = function(command, args) {
+    _Game_Interpreter_pluginCommand.call(this, command, args);
+    if (command == "DetectPictureClick") {
+      switch(args[0].toLowerCase()) {
+        case "on":
+          var id = parseInt(args[1]);
+          if (!~$.pictures.indexOf(id))
+            $.pictures.push(id);
+          break;
 
-				case "off":
-					var id = parseInt(args[1]);
-					if (~$.pictures.indexOf(id))
-						$.pictures.splice($.pictures.indexOf(parseInt(id)), 1);
-					break;
-			}
-		}
-	};
+        case "off":
+          var id = parseInt(args[1]);
+          if (~$.pictures.indexOf(id))
+            $.pictures.splice($.pictures.indexOf(parseInt(id)), 1);
+          break;
+      }
+    }
+  };
 
-	//-----------------------------------------------------------------------------
-	// Click & Press functions
-	//
+  //-----------------------------------------------------------------------------
+  // Click & Press functions
+  //
 
-	$.Click = function(pictureId) {
-		return TouchInput.isPictureClicked(pictureId);
-	};
+  $.Click = function(pictureId) {
+    return TouchInput.isPictureClicked(pictureId);
+  };
 
-	$.Press = function(pictureId) {
-		return TouchInput.isPicturePressed(pictureId);
-	};
+  $.Press = function(pictureId) {
+    return TouchInput.isPicturePressed(pictureId);
+  };
 })(TTK.DetectPictureClick);
 
 //=============================================================================
