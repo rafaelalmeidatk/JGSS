@@ -1,5 +1,5 @@
 //=============================================================================
-// TTK - Draggable Camera (v1.1.0)
+// TTK - Draggable Camera (v1.1.1)
 // by Fogomax
 //=============================================================================
 
@@ -37,7 +37,7 @@
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTK_DraggableCamera"] = "1.1.0";
+Imported["TTK_DraggableCamera"] = "1.1.1";
 
 var TTK = TTK || {};
 TTK.DraggableCamera = {};
@@ -74,7 +74,7 @@ TTK.DraggableCamera = {};
 
 		TouchInput.update = function() {
 			_TouchInput_update.call(this);
-			if (this._cameraAccX) {
+			if (this._cameraAccX && $gameMap) {
 				if (this._cameraAccX > 0) {
 					$gameMap._displayX -= this._cameraAccX / 48;
 					this._cameraAccX = (this._cameraAccX - this._storForceX < 0) ? (0) : (this._cameraAccX - this._storForceX);
@@ -85,7 +85,7 @@ TTK.DraggableCamera = {};
 				}
 			}
 
-			if (this._cameraAccY) {
+			if (this._cameraAccY && $gameMap) {
 				if (this._cameraAccY > 0) {
 					$gameMap._displayY -= this._cameraAccY / 48;
 					this._cameraAccY = (this._cameraAccY - this._storForceY < 0) ? (0) : (this._cameraAccY - this._storForceY);
