@@ -1,5 +1,5 @@
 //=============================================================================
-// TTKCC - Items HUD (v1.1.2)
+// TTKCC - Items HUD (v1.1.3)
 // by Fogomax
 // License: Attribution-ShareAlike 4.0 International - Creative Commons
 //=============================================================================
@@ -100,7 +100,7 @@
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTKC_ItemsHUD"] = "1.1.2";
+Imported["TTKC_ItemsHUD"] = "1.1.3";
 
 var TTK = TTK || {};
 TTK.ItemsHUD = {};
@@ -183,7 +183,7 @@ TTK.ItemsHUD = {};
 			this._lastPos = null;
 
 			$.lastItemsValues = newValues;
-			if (this._firstDraw) this._firstDraw = false;	
+			if (this._firstDraw) this._firstDraw = false;
 		}
 
 		if (this._lastPos != $.position)
