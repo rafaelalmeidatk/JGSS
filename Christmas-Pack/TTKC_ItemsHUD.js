@@ -97,13 +97,13 @@
 	@default top-left
 */
 
+"use strict";
+
 var Imported = Imported || {};
 Imported["TTKC_ItemsHUD"] = "1.1.2";
 
 var TTK = TTK || {};
 TTK.ItemsHUD = {};
-
-"use strict";
 
 (function($) {
 	$.Params = $plugins.filter(function(p) { return p.description.contains('<TTKC ItemsHUD>'); })[0].parameters;
@@ -149,7 +149,6 @@ TTK.ItemsHUD = {};
 
 	Window_Items_HUD.prototype.initialize = function() {
 		Window_Base.prototype.initialize.call(this, 0, 0, Graphics.width, 48 + this.standardPadding());
-		this.setPosition();
 		this.opacity = 0;
 		this._lastPos = -1;
 		this._firstDraw = true;
@@ -165,16 +164,12 @@ TTK.ItemsHUD = {};
 		if (!this.visible)
 			return;
 
-		if (this._lastPos != $.position)
-			this.setPosition();
-
 		var newValues = [];
 		for (var i = 0; i < $.items.length; i++)
 			newValues.push($gameParty.numItems($dataItems[$.items[i]]));
 
 		if (newValues.join() !== $.lastItemsValues.join() || this._firstDraw) {
 			this.contents.clear();
-
 			var lastSpace = 0;
 
 			for (var i = 0; i < $.items.length; i++) {
@@ -188,8 +183,11 @@ TTK.ItemsHUD = {};
 			this._lastPos = null;
 
 			$.lastItemsValues = newValues;
-			if (this._firstDraw) _firstDraw = false;
+			if (this._firstDraw) this._firstDraw = false;	
 		}
+
+		if (this._lastPos != $.position)
+			this.setPosition();
 	};
 
 	Window_Items_HUD.prototype.standardPadding = function() {
