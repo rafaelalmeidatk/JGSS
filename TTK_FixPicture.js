@@ -21,7 +21,7 @@
     ● Use
     ===========================================================================
     Just include the prefix in the image file name. Using the default Fix
-    Prefix, the image nave would be "[FIX]Image.png".
+    Prefix, the image name would be "[FIX]Image.png".
 
     @param Fix Prefix
     @desc The prefix the image needs have to be fixed
