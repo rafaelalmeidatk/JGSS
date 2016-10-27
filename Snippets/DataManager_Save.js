@@ -24,7 +24,7 @@
 
 	DataManager.makeSaveContents = function() {
 		contents = _DataManager_makeSaveContents.call(this);
-		// Save "bar" in the variable named foo, this will be written in the save file
+		// Saves "bar" in the variable named foo, this will be written in the save file
 		contents.foo = "bar";
 		return contents;
 	};
@@ -36,7 +36,7 @@
 		// At this point, $.foo == null
 		_DataManager_extractSaveContents.call(this, contents);
 
-		// Get the value of variable foo in the save file and sets in $.foo
+		// Gets the value of variable foo in the save file and sets in $.foo
 		$.foo = contents.foo;
 
 		// Now, $.foo == "bar"
