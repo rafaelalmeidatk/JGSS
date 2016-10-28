@@ -18,25 +18,25 @@
     ballon will always aim to the current event that is speaking.
 
     Dialog names: you can show a name with the message using the setName plug-in
-    command. Be aware: if the name you want have blank spaces, use the script
-    call command instead. When finishing a dialog remember to remove the name
-    (with removeName), otherwise the name will be shown in the next message,
+    command. Be aware: if the name you want to use have blank spaces, use the
+    script call command instead. When finishing a dialog remember to remove the
+    name (with removeName), otherwise the name will be shown in the next message,
     even if it is from a diferent event.
 
-    Animated faces: your faces can have life too! To give a animation to a face,
-    create a file with the animation sheets you want and move it to img/faces
-    folder. The file need have this name format:
-    prefix_index_Filename.png
+    Animated faces: your faces can have life too! To give an animation to a face,
+    create a file with the animation sheets you want to use and move it to
+    img/faces folder. The file must have this name format:
+    * prefix_index_Filename.png
     Where:
     prefix = the prefix you setted up in the options. Default is "anim_".
     index = the index of the face in your faceset
     Filename = the name of the faceset
 
     Example:
-    You want animate the face with index 0 in Actor1.png (the first one), so
-    you will do a file named anim_0_Actor1.png and inset the animations there.
-    You use one line per animations, the file does not have width limit. The
-    animation frames go from left to right and then go back. Image example:
+    You want to animate the face with index 0 in Actor1.png (the first one),
+    so you will do a file named anim_0_Actor1.png and inset the animations
+    there. You use one line per animations, the file does not have width limit.
+    The animation frames goes from left to right and then return. Image example:
     http://i.imgur.com/gTQ65mq.png (thanks to TrueCronus)
 
     The Animated Faces also comes with a special feature: the Speak Animated
@@ -59,7 +59,7 @@
     be used to avoid set the event ID everytime you want a ballon text
 
     - MessagePlus removeBallon
-    Turn off the Ballon Text, the messages come back to default
+    Turns off the Ballon Text, the messages come back to default
 
     - MessagePlus setName x
     Shows the name window with the name x
@@ -69,22 +69,22 @@
     spaces (example: "John Rick")
 
     - MessagePlus removeName
-    Hide the name window
+    Hides the name window
 
     - MessagePlus enableAnimatedFace a b c,d
-    Enable the Animated Face to the next message that has a face.
+    Activates the Animated Face to the next message that has a face.
     a = The vertical row of the desired animation (starting from 1)
     b = The number of frames the animation have (starting from 1)
     c,d = The delay between a animation and other, using this format: min,max
-    To a constant animation, dont write a value to c,d
+    To a constant animation, don't write a value to c,d
 
     - MessagePlus setSpeakAnimatedFace a b
-    Enable the Speak Animated Face to the next message that has a face.
+    Activates the Speak Animated Face to the next message that has a face.
     a = The vertical row of the speak animation (starting from 1)
     b = The number of frames the animation have (starting from 1)
 
     - MessagePlus disableAnimatedFace
-    Disable the Animated Face
+    Disables the Animated Face
 
 	@param Face Padding
 	@desc The padding (in pixels) of the face window
@@ -95,7 +95,7 @@
 	@default 50
 
 	@param Window Name Dim
-	@desc If the main message window dim, the name window will do too?
+	@desc If the main message window dim, does the name window will do too?
 	@default true
 
 	@param Animated Faces Prefix
@@ -214,16 +214,25 @@ TTK.MessagePlus = {};
 		this._faceWindow.close();
 		this._nameWindow.close();
 	};
+	
+	Window_Message.prototype.adjustWindowSettings = function() {
+		this.refreshSize();
+		this.refreshPosition();
+		this.refreshBackground();
+		this.createContents();
+	};
 
 	Window_Message.prototype.refreshSize = function(texts) {
 		this._nameWindow.refreshSize();
 		if ($.characterFocus < 0 && !$.characterFocusCurrent) {
 			this.width = this.windowWidth();
 			this.height = this.windowHeight();
-		} else {
+		} else if (texts) {
 			var width = 0;
 			for (var i = 0; i < texts.length; i++) {
-				width = (this.textWidth(texts[i]) > width) ? this.textWidth(texts[i]) : width;
+				var text = this.convertEscapeCharactersEx(texts[i]);
+				var textWidth = this.textWidth(text) + this.getPositionEffectWidth(texts[i]);
+				width = (textWidth > width) ? textWidth : width;
 			}
 			var stdP = this._faceWindow.standardPadding();
 			var maxWidth = (this.hasFace()) ? (Graphics.width - Window_Base._faceWidth - (stdP * 2)) : (Graphics.width);
@@ -340,6 +349,9 @@ TTK.MessagePlus = {};
 	Window_Message.prototype.newPage = function(textState) {
 		this._allowAfUpdate = false;
 		_Window_Message_newPage.call(this, textState);
+		this.refreshSize();
+		this.refreshPosition();
+		this.refreshBackground();
 
 		this._faceWindow.contents.clear();
 		if (this.hasFace() && $.characterFocus >= 0)
@@ -390,6 +402,16 @@ TTK.MessagePlus = {};
 		this.contents.clearRect(dx, dy, pw, ph);
 	    this.contents.blt(bitmap, sx, sy, sw, sh, dx, dy);
 	}
+
+	Window_Message.prototype.convertEscapeCharactersEx = function(text) {
+		var text = this.convertEscapeCharacters(text);
+		text = text.replace(/((MSGCORE|I|oc|ow|px|py|fs|pf)\[\d+\])/g, '');
+		return text;
+	};
+
+	Window_Message.prototype.getPositionEffectWidth = function(text) {
+		return text.match(/\\px\[(\d+)\]/) ? parseInt(RegExp.$1) : 0;
+	};
 
 	//-----------------------------------------------------------------------------
 	// Window_Message_Face
