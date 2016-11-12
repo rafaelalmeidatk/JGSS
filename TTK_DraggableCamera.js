@@ -1,43 +1,46 @@
 //=============================================================================
-// TTK - Draggable Camera (v1.1.1)
+// TTK - Draggable Camera (v1.1.2)
 // by Fogomax
 //=============================================================================
 
 /*:
-	* @author Fogomax
-	* @plugindesc This plugin allows the player to drag and move the camera
-	* <TTK DraggableCamera>
-	* @help
-	===========================================================================
-	● Explanation
-	===========================================================================
-	This plugins allows the player to drag and move the camera, simple.
-
-	===========================================================================
-	● Use
-	===========================================================================
-	To turn on/off the plugin, user the following plugin command:
-	 - DraggableCamera setEnabled x
-	Here x can be "true" (on) or "false" (off), without the ("). Example:
-	 - DraggableCamera setEnabled true
-	
-	@param Start on
-	@desc If the screen is draggable in the begin of game
-	@default true
-	
-	@param Cancel player move
-	@desc Cancel the player move when the camera is moved
-	@default true
-	
-	@param Speed
-	@desc Speed of move (the higher the faster). E. g.: 2.3.
-	@default 1
+  * @author Fogomax
+  * @plugindesc This plugin allows the player to drag and move the camera 
+  * with the mouse or touch
+  
+  <TTK DraggableCamera>
+  * @help
+  * ===========================================================================
+  * * Explanation
+  * ===========================================================================
+  * This plugins allows the player to drag and move the camera with the mouse
+  * or touch
+  *
+  * ===========================================================================
+  * * Use
+  * ===========================================================================
+  * To turn on/off the plugin, user the following plugin command:
+  *  - DraggableCamera setEnabled x
+  * Here x can be "true" (on) or "false" (off), without the ("). Example:
+  *  - DraggableCamera setEnabled true
+  
+  @param Start on
+  @desc If the screen is draggable in the begin of game
+  @default true
+  
+  @param Cancel player move
+  @desc Cancel the player move when the camera is moved
+  @default true
+  
+  @param Speed
+  @desc Speed of move (the higher the faster). E. g.: 2.3.
+  @default 1
 */
 
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTK_DraggableCamera"] = "1.1.1";
+Imported["TTK_DraggableCamera"] = "1.1.2";
 
 var TTK = TTK || {};
 TTK.DraggableCamera = {};
@@ -67,11 +70,11 @@ TTK.DraggableCamera = {};
 		this._cameraAccX = 0;
 		this._cameraAccY = 0;
 		this._storForceX = 0;
+		this._storForceY = 0;
 	};
 
 	if (TTK.SwipeMove && $.enabled) {
 		var _TouchInput_update = TouchInput.update;
-
 		TouchInput.update = function() {
 			_TouchInput_update.call(this);
 			if (this._cameraAccX && $gameMap) {
@@ -116,18 +119,18 @@ TTK.DraggableCamera = {};
 		_TouchInput_onMove.call(this, x, y);
 	};
 
-	if (TTK.SwipeMove) {
-		var _TouchInput_onRelease = TouchInput._onRelease;
+	var _TouchInput_onRelease = TouchInput._onRelease;
 
-		TouchInput._onRelease = function(x, y) {
-			_TouchInput_onRelease.call(this, x, y);
+	TouchInput._onRelease = function(x, y) {
+		_TouchInput_onRelease.call(this, x, y);
+		if (TTK.SwipeMove) {
 			this._cameraAccX = this._forceX;
 			this._cameraAccY = this._forceY;
 			this._storForceX = this._forceX / 48;
 			this._storForceY = this._forceY / 48;
-			if ($.denyMove) $.denyMove = false;
-		};
-	}
+		}
+		if ($.denyMove) $.denyMove = false;
+	};
 
 	//-----------------------------------------------------------------------------
 	// Scene_Map
@@ -219,9 +222,9 @@ TTK.DraggableCamera = {};
 
 	Game_Interpreter.prototype.pluginCommand = function(command, args) {
 		_Game_Interpreter_pluginCommand.call(this, command, args);
-		if (command == "DraggableCamera") {
-			if (args[0] == "setEnabled") {
-				$.enabled = (args[1] === 'true');
+		if (command.toLowerCase() === "draggablecamera") {
+			if (args[0].toLowerCase() === "setenabled") {
+				$.enabled = (args[1].toLowerCase() === 'true');
 			}
 		}
 	};
