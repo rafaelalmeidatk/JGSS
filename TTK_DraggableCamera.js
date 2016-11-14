@@ -1,5 +1,5 @@
 //=============================================================================
-// TTK - Draggable Camera (v1.1.2)
+// TTK - Draggable Camera (v1.1.4)
 // by Fogomax
 //=============================================================================
 
@@ -7,7 +7,7 @@
   * @author Fogomax
   * @plugindesc This plugin allows the player to drag and move the camera 
   * with the mouse or touch
-  
+  *
   <TTK DraggableCamera>
   * @help
   * ===========================================================================
@@ -21,26 +21,30 @@
   * ===========================================================================
   * To turn on/off the plugin, user the following plugin command:
   *  - DraggableCamera setEnabled x
-  * Here x can be "true" (on) or "false" (off), without the ("). Example:
+  * Here "x" can be "true" (on) or "false" (off), without the ("). Example:
   *  - DraggableCamera setEnabled true
   
-  @param Start on
+  @param Start On
   @desc If the screen is draggable in the begin of game
   @default true
   
-  @param Cancel player move
+  @param Cancel Player Move
   @desc Cancel the player move when the camera is moved
   @default true
   
   @param Speed
   @desc Speed of move (the higher the faster). E. g.: 2.3.
   @default 1
+  
+  @param Distance Limit
+  @desc The max distance that a single drag can move, this prevents unexpected moves.
+  @default 10
 */
 
 "use strict";
 
 var Imported = Imported || {};
-Imported["TTK_DraggableCamera"] = "1.1.2";
+Imported["TTK_DraggableCamera"] = "1.1.4";
 
 var TTK = TTK || {};
 TTK.DraggableCamera = {};
@@ -52,9 +56,10 @@ TTK.DraggableCamera = {};
 	// Plugin global variables
 	//
 
-	$.cancelPlayerMove = ($.Params["Cancel player move"].toLowerCase() === 'true');
-	$.enabled = ($.Params["Start on"].toLowerCase() === 'true');
+	$.cancelPlayerMove = ($.Params["Cancel Player Move"].toLowerCase() === 'true');
+	$.enabled = ($.Params["Start On"].toLowerCase() === 'true');
 	$.speed = parseFloat($.Params["Speed"]);
+	$.distanceLimit = parseInt($.Params['Distance Limit']);
 	$.denyMove = false;
 
 	//-----------------------------------------------------------------------------
@@ -104,6 +109,7 @@ TTK.DraggableCamera = {};
 	var _TouchInput_onTrigger = TouchInput._onTrigger;
 
 	TouchInput._onTrigger = function(x, y) {
+		if (this.isMoved()) return;
 		_TouchInput_onTrigger.call(this, x, y);
 		this._lastCameraX = this.x;
 		this._lastCameraY = this.y;
@@ -148,12 +154,8 @@ TTK.DraggableCamera = {};
 		if (TouchInput.isMoved() && $.enabled) {
 			var newX = ((TouchInput._lastCameraX - TouchInput.x) / 48) * $.speed;
 			var newY = ((TouchInput._lastCameraY - TouchInput.y) / 48) * $.speed;
-
-			if (newX)
-				$gameMap._displayX += newX;
-
-			if (newY)
-				$gameMap._displayY += newY;
+			if (newX) $gameMap._displayX += Math.min(newX, $.distanceLimit);
+			if (newY) $gameMap._displayY += Math.min(newY, $.distanceLimit);
 		}
 
 		if ((TouchInput.isMoved() || TouchInput._cameraAccX || TouchInput._cameraAccY) && $.enabled) {
